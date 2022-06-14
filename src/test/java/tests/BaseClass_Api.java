@@ -19,7 +19,7 @@ public class BaseClass_Api {
     @BeforeClass
     public static RequestSpecification requestSpecification() throws IOException {
         PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
-        String BaseUrl = prop.getProperty("BaseUrl");
+        String BaseUrl = prop.getProperty("baseUrl");
         if (requestSpecification == null) {
             requestSpecification = new RequestSpecBuilder().setBaseUri(BaseUrl)
                     .setContentType(ContentType.JSON)

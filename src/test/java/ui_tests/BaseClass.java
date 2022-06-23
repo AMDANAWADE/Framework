@@ -21,6 +21,7 @@ public class BaseClass {
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     ExcelHandling excelHandlingDataFile = new ExcelHandling(dataFile, 0);
 
+    //This is before method
     @BeforeMethod
     public void setUp(Method method) {
         Map<String, String> ui_tests = Runner.ui_tests;
@@ -39,7 +40,7 @@ public class BaseClass {
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
-
+    //This is after method
     @AfterMethod
     public void closeBrowser() {
         if (driver != null)

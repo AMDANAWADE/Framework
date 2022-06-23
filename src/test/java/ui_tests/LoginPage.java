@@ -26,19 +26,3 @@ public class LoginPage extends BaseClass {
 
     }
 }
-//        @Test
-//        public void Login2(){
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("prakruthi.koteshwar@gmail.com");
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@id='continue']")).click();
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("Prakruthi123!");
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@id=\"signInSubmit\"]")).click();
-//
-//        @Test
-//        public void Login3(){
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@name='email']")).sendKeys("prakruthi.koteshwar@gmail.com");
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@id='continue']")).click();
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@name='password']")).sendKeys("Prakruthi123!");
-//            DriverFactory.getDriver().findElement(By.xpath("//input[@id=\"signInSubmit\"]")).click();
-//
-//      }
-//    }

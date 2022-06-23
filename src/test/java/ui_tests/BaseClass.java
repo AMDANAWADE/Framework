@@ -33,7 +33,6 @@ public class BaseClass {
             openBrowser(String.valueOf(tc_data.get("BROWSER")));
         }
     }
-
     public void openBrowser(String browserName) {
         DriverFactory.setDriver(browserName);
         driver = DriverFactory.getDriver();

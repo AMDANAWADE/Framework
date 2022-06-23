@@ -9,18 +9,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class JsonHandler {
-    FileWriter jsonWrite;
+    private static FileWriter jsonWrite;
+
     public static String readFileAsString(String file)throws Exception
     {
         return new String(Files.readAllBytes(Paths.get(file)));
     }
 
-    public void editJsonFile(String[] contents, String[] headers,String jsonPath) throws IOException {
+    public static String editJsonFile(String jsonPath, String jsonValue,String jsonDataPath) throws IOException {
         try {
-            String jsonString = readFileAsString(jsonPath);
-            for(int i=0;i<headers.length;i++) {
-                jsonString= JsonPath.parse(jsonString).set("$."+headers[i], contents[i]).jsonString();
-            }
+            String jsonString = readFileAsString(jsonDataPath);
+                jsonString= JsonPath.parse(jsonString).set(jsonPath, jsonValue).jsonString();
             jsonWrite = new FileWriter(jsonPath);
             jsonWrite.write(jsonString);
         }
@@ -30,6 +29,13 @@ public class JsonHandler {
         }
         finally {
             jsonWrite.close();
+
         }
+        return null;
+    }
+
+    public static String editJsonValue(String jsonPath, String jsonValue, String jsonRequestBody) {
+        String jsonString= JsonPath.parse(jsonRequestBody).set(jsonPath, jsonValue).jsonString();
+        return jsonString;
     }
 }

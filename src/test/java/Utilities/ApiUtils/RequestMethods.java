@@ -9,10 +9,10 @@ import java.io.IOException;
 import static tests.BaseClass_Api.requestSpecification;
 
 public class RequestMethods {
-    public static Response postCall(String endPoint, File jsonObject) throws IOException {
+    public static Response postCall(String endPoint, String jsonObject) throws IOException {
         return requestSpecification().body(jsonObject).when().post(endPoint);
     }
-    public static Response putCall(String endPoint,File jsonObject) throws IOException {
+    public static Response putCall(String endPoint,String jsonObject) throws IOException {
         return requestSpecification().body(jsonObject).when().put(endPoint);
     }
     public static Response getCall(String endPoint) throws IOException {

@@ -28,12 +28,14 @@ public class BaseClass {
         Map<String, String> tc_details;
         Map<String, String> tc_data;
         //check if it api or ui test
+
         if (ui_tests.containsValue(method.getName())) {
             tc_details = excelHandlingRunner.get_test_details_using_classname_and_method(method.getName(), this.getClass().getSimpleName(), "TC_METHOD", "TC_CLASS");
             tc_data = excelHandlingDataFile.get_single_test_details(tc_details.get("TC_NAME"), "TC_NAME");
             openBrowser(String.valueOf(tc_data.get("BROWSER")));
         }
     }
+    //        open browser
     public void openBrowser(String browserName) {
         DriverFactory.setDriver(browserName);
         driver = DriverFactory.getDriver();

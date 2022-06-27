@@ -1,4 +1,4 @@
-package Utilities.ApiUtils;
+package Utilities;
 
 public class StandardHeaders {
     public static final String CUSTOMER_ID = "customerId";

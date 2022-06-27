@@ -1,7 +1,6 @@
-package tests;
+package api_tests;
 
 import Utilities.PropertiesFileHandler;
-import Utilities.Utils;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;

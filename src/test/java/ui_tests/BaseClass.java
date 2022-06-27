@@ -3,13 +3,21 @@ package ui_tests;
 import Utilities.DriverFactory;
 import Utilities.ExcelHandling;
 import Utilities.PropertiesFileHandler;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import runner.Runner;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Map;
 
 
@@ -35,6 +43,7 @@ public class BaseClass {
             openBrowser(String.valueOf(tc_data.get("BROWSER")));
         }
     }
+
     //        open browser
     public void openBrowser(String browserName) {
         DriverFactory.setDriver(browserName);
@@ -42,6 +51,15 @@ public class BaseClass {
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
+
+    public String getScreenShotAsBase64() throws IOException {
+        File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "Screenshots/image.png";
+        FileUtils.copyFile(source, new File(path));
+        byte[] imageBytes = IOUtils.toByteArray(new FileInputStream(path));
+        return Base64.getEncoder().encodeToString(imageBytes);
+    }
+
     //This is after method
     @AfterMethod
     public void closeBrowser() {

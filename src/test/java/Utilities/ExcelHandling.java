@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class ExcelHandling implements IDataHandler{
+public class ExcelHandling implements IDataHandler {
     private String filePath;
     private String sheetName = null;
     private int sheetNo = 0;
@@ -48,6 +48,7 @@ public class ExcelHandling implements IDataHandler{
         }
         return colCount;
     }
+
     public int getRowSize() {
         return sh.getLastRowNum() + 1;
     }
@@ -110,6 +111,7 @@ public class ExcelHandling implements IDataHandler{
         }
         return colNames;
     }
+
     @Override
     public Map<String, String> getData(int rowNum) {
         if (isEmptyRow(rowNum))
@@ -127,14 +129,13 @@ public class ExcelHandling implements IDataHandler{
 
     public List<Map<String, String>> get_test_cases(List<Integer> row_indexes) {
         List<Map<String, String>> testcases = new ArrayList<>();
-        for(int i=0;i<row_indexes.size();i++)
-        {
-           testcases.add(getData(row_indexes.get(i)));
+        for (int i = 0; i < row_indexes.size(); i++) {
+            testcases.add(getData(row_indexes.get(i)));
         }
         return testcases;
     }
-    public List<String> get_values(List<Integer> row_indexes, String key)
-    {
+
+    public List<String> get_values(List<Integer> row_indexes, String key) {
         List<Map<String, String>> testcases = get_test_cases(row_indexes);
         List<String> values = new ArrayList<>();
         for (int i = 0; i < testcases.size(); i++) {
@@ -163,6 +164,7 @@ public class ExcelHandling implements IDataHandler{
         Map<String, String> data = getData(row_index);
         return data;
     }
+
     @Override
     public List<Map<String, String>> getAllData() {
         List<String> headerNames = get_header_names();

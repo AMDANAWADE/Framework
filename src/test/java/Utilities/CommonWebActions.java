@@ -119,8 +119,7 @@ public class CommonWebActions {
         Thread.sleep(timeInSeconds);
     }
 
-    public void scrollBy(int x,int y)
-    {
+    public void scrollBy(int x, int y) {
         ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)", "");
     }
 

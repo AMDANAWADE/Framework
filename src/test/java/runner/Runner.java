@@ -1,12 +1,16 @@
 package runner;
 
-import Utilities.*;
+import Utilities.CommonUtil;
+import Utilities.ExcelHandling;
+import Utilities.ListenersImplementation;
+import Utilities.PropertiesFileHandler;
+import org.testng.ITestNGListener;
 import org.testng.TestNG;
 import org.testng.asserts.SoftAssert;
+import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
-import org.testng.xml.XmlClass;
 
 import java.util.*;
 
@@ -17,9 +21,10 @@ public class Runner {
         PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
         String runnerFile = prop.getProperty("RUNNER_FILE_PATH");
         List<Map<String, String>> testcases = new LinkedList<>();
+        List<java.lang.Class<? extends ITestNGListener>> listeners = new ArrayList<>();
         SoftAssert softAssert = new SoftAssert();
         if (runnerFile != null) {
-            ExcelHandling excelHandlingRunner= new ExcelHandling(runnerFile, 0);
+            ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
             int col_index = excelHandlingRunner.get_column_index_having_value(0, "EXECUTE");
             int row_index = excelHandlingRunner.get_row_index(col_index, "YES");
             List<Integer> row_indexes = excelHandlingRunner.get_row_indexes_having_value_in_column(row_index, col_index, "YES");
@@ -79,6 +84,8 @@ public class Runner {
             List<XmlSuite> suites = new ArrayList<>();
             suites.add(testSuite);
             TestNG tng = new TestNG();
+            listeners.add(ListenersImplementation.class);
+            tng.setListenerClasses(listeners);
             tng.setXmlSuites(suites);
             tng.run();
         } catch (Exception e) {

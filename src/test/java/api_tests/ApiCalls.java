@@ -46,6 +46,7 @@ public class ApiCalls extends BaseClass_Api {
         response = CommonAPIactions.getCall(CommonAPIactions.SINGLE_USER_API, StandardHeaders.AUTHENTICATION,"id");
         CommonAPIactions.validateStatusCode(response,200);
         JsonHandler.jsonSchemaValidation(response,prop.getProperty("GET_SINGLE_USER_SCHEMA"));
+        System.out.println("Get Call Executed");
     }
     @Test
     public static void postCreateUserCall() throws Exception {
@@ -53,6 +54,7 @@ public class ApiCalls extends BaseClass_Api {
         CommonAPIactions.validateStatusCode(response,201);
         JsonHandler.jsonSchemaValidation(response,prop.getProperty("POST_CREATE_USER_SCHEMA"));
         validatePostSingleUserResponse(response);
+        System.out.println("Post Call Executed");
     }
     @Test
     public static void putUpdateUserCall() throws Exception {
@@ -60,11 +62,13 @@ public class ApiCalls extends BaseClass_Api {
         CommonAPIactions.validateStatusCode(response,200);
         JsonHandler.jsonSchemaValidation(response,prop.getProperty("PUT_UPDATE_USER_SCHEMA"));
         validatePutUpdateUserResponse(response);
+        System.out.println("Put Call Executed");
     }
     @Test
     public static void deleteUserCall() throws IOException {
         response = CommonAPIactions.deleteCall(CommonAPIactions.DELETE_USER_API, StandardHeaders.AUTHENTICATION,"id");
         CommonAPIactions.validateStatusCode(response,204);
+        System.out.println("Delete Call Executed");
     }
 
     public static void validatePostSingleUserResponse(Response res){

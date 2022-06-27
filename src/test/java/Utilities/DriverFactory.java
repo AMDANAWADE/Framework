@@ -11,6 +11,7 @@ public class DriverFactory {
     private DriverFactory() {
 
     }
+
     public static ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
     public static String projectPath = System.getProperty("user.dir");
     public static PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");

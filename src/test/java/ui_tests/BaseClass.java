@@ -43,6 +43,7 @@ public class BaseClass {
             openBrowser(String.valueOf(tc_data.get("BROWSER")));
         }
     }
+
     //        open browser
     public void openBrowser(String browserName) {
         DriverFactory.setDriver(browserName);
@@ -50,13 +51,15 @@ public class BaseClass {
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
-    public  String getScreenShotAsBase64() throws IOException {
-        File source=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        String path=System.getProperty("user.dir")+"Screenshots/image.png";
-        FileUtils.copyFile(source,new File(path));
+
+    public String getScreenShotAsBase64() throws IOException {
+        File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "Screenshots/image.png";
+        FileUtils.copyFile(source, new File(path));
         byte[] imageBytes = IOUtils.toByteArray(new FileInputStream(path));
         return Base64.getEncoder().encodeToString(imageBytes);
     }
+
     //This is after method
     @AfterMethod
     public void closeBrowser() {

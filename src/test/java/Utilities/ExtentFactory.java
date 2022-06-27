@@ -4,20 +4,23 @@ package Utilities;
 import com.aventstack.extentreports.ExtentTest;
 
 public class ExtentFactory {
-    private ExtentFactory(){
+    private ExtentFactory() {
 
     }
+
     private static ExtentFactory instance = new ExtentFactory();
-    public  static ExtentFactory getInstance(){
+
+    public static ExtentFactory getInstance() {
         return instance;
     }
 
     ThreadLocal<ExtentTest> extent = new ThreadLocal<ExtentTest>();
 
-    public ExtentTest getExtent(){
+    public ExtentTest getExtent() {
         return extent.get();
     }
-    public void setExtent(ExtentTest extentTestobject){
+
+    public void setExtent(ExtentTest extentTestobject) {
         extent.set(extentTestobject);
     }
 }

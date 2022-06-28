@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class CsvHandling {
+public class CsvHandling implements IDataHandler{
     private String filePath;
     private int sheetNo = 0;
     private Workbook wb;
@@ -101,8 +101,6 @@ public class CsvHandling {
         });
         return Collections.unmodifiableMap(dataMap);
     }
-
-
     public int getRowSize() {
         return sh.getLastRowNum() + 1;
     }
@@ -153,40 +151,24 @@ public class CsvHandling {
         return null;
 
     }
-
-    //This method is to read all the lines from a csv file in form of list inside list
-    public static List<List<String>> alllines(String filepath) throws IOException {
-        try {
-            String line = "";
-            List<List<String>> productDetails = new ArrayList<>();
-            File file = new File(filepath);
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            while ((line = br.readLine()) != null) {
-                String[] products = line.split(",");
-                productDetails.add(Arrays.asList(products));
+    @Override
+    public List<Map<String, String>> getAllData() {
+        List<String> headerNames = get_header_names();
+        int no_of_rows = getRowSize();
+        List<Map<String, String>> dataList = new ArrayList<>();
+        for (int i = 1; i < no_of_rows - 1; i++) {
+            Row row = sh.getRow(i);
+            if (isEmptyRow(i))
+                continue;
+            Map<String, String> dataMap = new LinkedHashMap<>();
+            for (Cell cell : row) {
+                int index = cell.getColumnIndex();
+                if (headerNames.get(index).trim().length() > 0)
+                    dataMap.put(headerNames.get(index).trim(), get_cell_value(cell.getRowIndex(), cell.getColumnIndex()));
             }
-            return productDetails;
-
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found! check the correct file path.");
+            ;
+            dataList.add(dataMap);
         }
-        return null;
-    }
-
-    public static void main(String args[]) throws IOException {
-        CsvHandling c = new CsvHandling();
-        c.readSingleline("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv");
-        String[] Data;
-        Data = c.readSingleline("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv");
-        System.out.println(Data[2]);
-
-        CsvHandling c1 = new CsvHandling();
-        c1.readFromLast("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv");
-        System.out.println(c1.readFromLast("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv"));
-
-        CsvHandling c2 = new CsvHandling();
-        c2.alllines("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv");
-        System.out.println(c2.alllines("C:\\Users\\AMDANAWADE\\Downloads\\CSV\\src\\test\\Utilities\\DATAFILE.csv"));
-
+        return Collections.unmodifiableList(dataList);
     }
 }

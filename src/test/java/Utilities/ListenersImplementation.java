@@ -41,13 +41,9 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
 
     public void onFinish(ISuite suite) {
         report.flush();
-
     }
-
-
     public void onStart(ISuite suite) {
         report = ExtentSetup.setupExtentReport();
-
     }
 }
 

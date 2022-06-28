@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class FileHandler {
+
     public boolean checkFileExists(String file_path) {
         return Files.exists(Path.of(file_path));
     }

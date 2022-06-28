@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import runner.Runner;
@@ -29,6 +30,7 @@ public class BaseClass {
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     ExcelHandling excelHandlingDataFile = new ExcelHandling(dataFile, 0);
 
+    //    public static Map<String, String> tc_data;
     //This is before method
     @BeforeMethod
     public void setUp(Method method) {
@@ -49,10 +51,11 @@ public class BaseClass {
         DriverFactory.setDriver(browserName);
         driver = DriverFactory.getDriver();
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+
     }
 
-    public String getScreenShotAsBase64() throws IOException {
+    public String getScreenShotAsBase64(WebDriver driver) throws IOException {
         File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         String path = System.getProperty("user.dir") + "Screenshots/image.png";
         FileUtils.copyFile(source, new File(path));

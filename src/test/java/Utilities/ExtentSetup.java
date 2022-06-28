@@ -19,7 +19,7 @@ public class ExtentSetup {
         extent = new ExtentReports();
         extent.attachReporter(sparkReport);
         final File CONF = new File("extentconfig.xml");
-        sparkReport.loadXMLConfig(String.valueOf(CONF));
+        //sparkReport.loadXMLConfig(String.valueOf(CONF));
         return extent;
     }
 }

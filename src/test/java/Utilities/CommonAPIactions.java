@@ -6,7 +6,6 @@ import api_tests.BaseClass_Api;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CommonAPIactions extends BaseClass_Api {
     private static BufferedReader read_product=null;

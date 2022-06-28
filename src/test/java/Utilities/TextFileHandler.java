@@ -108,16 +108,4 @@ public class TextFileHandler {
             return newFile;
         }
 
-        public static void main(String args[]) {
-            TextFileHandler t1 = new TextFileHandler();
-            t1.Read_Text_File_Line_To_Line();
-            System.out.println(t1.Read_Text_File_Line_To_Line());
-            TextFileHandler t2 = new TextFileHandler();
-            t2.read_whole_TextFile();
-            System.out.println(t2.read_whole_TextFile());
-            TextFileHandler t3 = new TextFileHandler();
-            t3.readFile_Store_Data();
-            System.out.println(t3.readFile_Store_Data());
-
-        }
     }

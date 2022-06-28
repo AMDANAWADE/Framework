@@ -5,7 +5,8 @@
     </listeners>
     <test  name="isuitetest">
         <classes>
-            <class name="ui_tests.LoginPage"/>
+            <class name="ui_tests.BaseClass"/>
+            <class name="ui_tests.TestAmazonSearchPage"/>
         </classes>
     </test><!-- Test -->
 </suite><!-- Test -->

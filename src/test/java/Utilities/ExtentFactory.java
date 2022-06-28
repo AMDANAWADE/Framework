@@ -14,7 +14,7 @@ public class ExtentFactory {
         return instance;
     }
 
-    ThreadLocal<ExtentTest> extent = new ThreadLocal<ExtentTest>();
+    public static ThreadLocal<ExtentTest> extent = new ThreadLocal<ExtentTest>();
 
     public ExtentTest getExtent() {
         return extent.get();

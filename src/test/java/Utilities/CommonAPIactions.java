@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CommonAPIactions extends BaseClass_Api {
     private static BufferedReader read_product=null;

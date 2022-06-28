@@ -3,10 +3,7 @@ package Utilities;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import org.testng.ISuite;
-import org.testng.ISuiteListener;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
+import org.testng.*;
 
 
 public class ListenersImplementation implements ITestListener, ISuiteListener {
@@ -41,13 +38,9 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
 
     public void onFinish(ISuite suite) {
         report.flush();
-
     }
-
-
     public void onStart(ISuite suite) {
         report = ExtentSetup.setupExtentReport();
-
     }
 }
 

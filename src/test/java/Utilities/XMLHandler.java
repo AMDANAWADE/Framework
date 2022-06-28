@@ -25,6 +25,27 @@ import java.util.*;
 
 
 public class XMLHandler {
+    public static String GetTagValue(String Filepath, String node_xpath, Integer node_index,String TagName) {
+        String tagValue = null;
+        try {
+            File file = new File(Filepath);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(file);
+            doc.getDocumentElement().normalize();
+            System.out.println("Root element name is: " + doc.getDocumentElement().getNodeName());
+            NodeList nodeList;
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            nodeList = (NodeList) xPath.compile(node_xpath).evaluate(
+                    doc, XPathConstants.NODESET);
+            Node node = nodeList.item(node_index);
+            Element element = (Element) node;
+            tagValue = element.getElementsByTagName(TagName).item(0).getTextContent();
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return tagValue;
+    }
     public static Map<String, String> GetData(String Filepath, String node_xpath, Integer node_index) {
         Map<String, String> data = new HashMap<>();
         try {

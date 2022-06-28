@@ -8,7 +8,6 @@ import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import runner.Runner;
@@ -17,9 +16,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.Base64;
 import java.util.Map;
+
 
 
 public class BaseClass {
@@ -30,15 +29,11 @@ public class BaseClass {
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     ExcelHandling excelHandlingDataFile = new ExcelHandling(dataFile, 0);
 
-    //    public static Map<String, String> tc_data;
-    //This is before method
     @BeforeMethod
     public void setUp(Method method) {
         Map<String, String> ui_tests = Runner.ui_tests;
         Map<String, String> tc_details;
         Map<String, String> tc_data;
-        //check if it api or ui test
-
         if (ui_tests.containsValue(method.getName())) {
             tc_details = excelHandlingRunner.get_test_details_using_classname_and_method(method.getName(), this.getClass().getSimpleName(), "TC_METHOD", "TC_CLASS");
             tc_data = excelHandlingDataFile.get_single_test_details(tc_details.get("TC_NAME"), "TC_NAME");
@@ -46,13 +41,11 @@ public class BaseClass {
         }
     }
 
-    //        open browser
     public void openBrowser(String browserName) {
         DriverFactory.setDriver(browserName);
         driver = DriverFactory.getDriver();
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
         driver.manage().window().maximize();
-
     }
 
     public String getScreenShotAsBase64(WebDriver driver) throws IOException {
@@ -63,7 +56,6 @@ public class BaseClass {
         return Base64.getEncoder().encodeToString(imageBytes);
     }
 
-    //This is after method
     @AfterMethod
     public void closeBrowser() {
         if (driver != null)

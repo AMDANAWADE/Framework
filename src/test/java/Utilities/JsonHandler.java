@@ -1,8 +1,11 @@
 package Utilities;
 
+import api_tests.ApiCalls;
 import com.jayway.jsonpath.JsonPath;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -14,9 +17,17 @@ import java.nio.file.Paths;
 
 public class JsonHandler {
 
-    public static String readFileAsString(String file)throws Exception
+    static Logger log = LogManager.getLogger(JsonHandler.class);
+
+    public static String readFileAsString(String file)
     {
-        return new String(Files.readAllBytes(Paths.get(file)));
+        try {
+            return new String(Files.readAllBytes(Paths.get(file)));
+        }
+        catch (Exception e){
+            log.fatal(e);
+        }
+        return null;
     }
 
     public static String editJsonValue(String jsonPath, String jsonValue, String jsonRequestBody)  {
@@ -24,7 +35,7 @@ public class JsonHandler {
             return JsonPath.parse(jsonRequestBody).set(jsonPath, jsonValue).jsonString();
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.fatal(e);
         }
         return null;
     }
@@ -34,7 +45,7 @@ public class JsonHandler {
             return response.path(title).toString();
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.fatal(e);
         }
         return null;
     }
@@ -44,7 +55,7 @@ public class JsonHandler {
             response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(jsonSchemaPath)));
         }
         catch (Exception e){
-            e.printStackTrace();
+            log.fatal(e);
         }
     }
 }

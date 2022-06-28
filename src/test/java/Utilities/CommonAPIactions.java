@@ -24,24 +24,21 @@ public class CommonAPIactions extends BaseClass_Api {
         response.then().assertThat().statusCode(expected);
   }
 
-   //All the get calls
     public static Response getCall(String endPoint,String pathKey,String pathValue,HashMap<String,String> headers,HashMap<String,String> queryParams,String authToken) throws Exception {
         reqSpec=createRequest(pathKey,pathValue,headers, queryParams,authToken);
         return reqSpec.get(endPoint);
     }
 
-    //All the post calls
     public static Response postCall(String endPoint, String jsonObject,String pathKey,String pathValue, HashMap<String,String> headers, HashMap<String,String> queryParams,String authToken) throws Exception {
         reqSpec=createRequest(pathKey,pathValue,headers, queryParams,authToken);
         return reqSpec.body(jsonObject).post(endPoint);
     }
-    //All the put calls
+
     public static Response putCall(String endPoint,String jsonObject,String pathKey,String pathValue,HashMap<String,String> headers,HashMap<String,String> queryParams,String authToken) throws Exception {
         reqSpec=createRequest(pathKey,pathValue,headers, queryParams,authToken);
         return reqSpec.body(jsonObject).put(endPoint);
     }
 
-    //All the delete calls
     public static Response deleteCall(String endPoint,String pathKey,String pathValue,HashMap<String,String> headers,HashMap<String,String> queryParams,String authToken) throws Exception {
         reqSpec=createRequest(pathKey,pathValue,headers, queryParams,authToken);
         return reqSpec.delete(endPoint);

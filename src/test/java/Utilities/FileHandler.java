@@ -1,5 +1,9 @@
 package Utilities;
 
+import Pages.LoginPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,37 +14,33 @@ import java.util.Scanner;
 
 public class FileHandler {
 
-//    public boolean checkFileExists(String file_path) {
-//        return Files.exists(Path.of(file_path));
-//    }
-
-    //To create a file
-//    public static void create_file(String filePath) {
-//        try {
-//            Files.createFile(Path.of(filePath));
-//        } catch (IOException e) {
-//            //throw new RuntimeException(e);
-//            System.out.println("An error has occurred.");
-//            e.printStackTrace();
-//        }
-//    }
-
-    //To write a file
-    public static void write_file(String msg, String file_path)
-    {
+    public boolean checkFileExists(String file_path) {
+        return Files.exists(Path.of(file_path));
+    }
+    static Logger log = LogManager.getLogger(LoginPage.class);
+    public static void create_file(String filePath) {
         try {
-            FileWriter Writer = new FileWriter(file_path);
-            //String msg = "Files in Java are seriously good!!";
-            Writer.write(msg);
-            Writer.close();
-            System.out.println("The data written in file is:"+msg);
+            Files.createFile(Path.of(filePath));
         } catch (IOException e) {
-            System.out.println("An error has occurred.");
+            log.info("An error has occurred.");
             e.printStackTrace();
         }
     }
 
-    //read from a file
+    public static void write_file(String msg, String file_path)
+    {
+        try {
+            FileWriter Writer = new FileWriter(file_path);
+
+            Writer.write(msg);
+            Writer.close();
+            log.info("The data written in file is:"+msg);
+        } catch (IOException e) {
+            log.info("An error has occurred.");
+            e.printStackTrace();
+        }
+    }
+
     public static void read_file(String file_path)
     {
         try {
@@ -48,26 +48,25 @@ public class FileHandler {
             Scanner Reader = new Scanner(file);
             while (Reader.hasNextLine()) {
                 String data = Reader.nextLine();
-                System.out.println("The data present in file is:"+data);
+                log.info("The data present in file is:"+data);
             }
             Reader.close();
         }
 
         catch (FileNotFoundException e) {
-            System.out.println("An error has occurred.");
+            log.info("An error has occurred.");
             e.printStackTrace();
         }
     }
 
-    //To delete the file
     public static void delete_file(String file_path)
     {
         File myObj = new File(file_path);
         if (myObj.delete()) {
-            System.out.println("The deleted file is : " + myObj.getName());
+            log.info("The deleted file is : " + myObj.getName());
         }
         else {
-            System.out.println("Failed in deleting the file.");
+            log.info("Failed in deleting the file.");
         }
     }
 }

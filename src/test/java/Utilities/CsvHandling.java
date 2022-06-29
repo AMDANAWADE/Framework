@@ -1,5 +1,8 @@
 package Utilities;
 
+import Pages.LoginPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
@@ -12,7 +15,7 @@ public class CsvHandling implements IDataHandler{
     private Workbook wb;
     private Sheet sh;
     private int headerRow = 0;
-
+    static Logger log = LogManager.getLogger(LoginPage.class);
     public CsvHandling(String file_location, String sheet_name) {
         this.filePath = file_location;
         try {
@@ -130,7 +133,7 @@ public class CsvHandling implements IDataHandler{
             }
             return Data;
         } catch (FileNotFoundException e) {
-            System.out.println("File not found! check the correct file path.");
+            log.info("File not found! check the correct file path.");
         }
         return null;
     }
@@ -146,7 +149,7 @@ public class CsvHandling implements IDataHandler{
             }
             return last;
         } catch (FileNotFoundException e) {
-            System.out.println("File not found! check the correct file path.");
+            log.info("File not found! check the correct file path.");
         }
         return null;
 

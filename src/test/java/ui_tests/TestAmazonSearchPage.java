@@ -8,13 +8,13 @@ import java.io.IOException;
 
 public class TestAmazonSearchPage extends BaseClass {
 
-    @Test(priority = 1)
-    public void SearchOperation() throws InterruptedException, IOException {
+    @Test
+    public void SearchOperation() throws IOException {
         AmazonSearchPage page = new AmazonSearchPage(DriverFactory.getDriver());
         page.searchProduct("laptop");
     }
 
-    @Test(priority = 2)
+    @Test
     public void ClickAddToCart() throws InterruptedException, IOException {
         AmazonSearchPage page = new AmazonSearchPage(DriverFactory.getDriver());
         page.searchProduct("laptop");
@@ -22,7 +22,7 @@ public class TestAmazonSearchPage extends BaseClass {
 
     }
 
-    @Test(priority = 3)
+    @Test
     public void proceedToBuy() throws InterruptedException, IOException {
         AmazonSearchPage page = new AmazonSearchPage(DriverFactory.getDriver());
         page.searchProduct("laptop");

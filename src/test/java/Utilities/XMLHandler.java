@@ -1,5 +1,8 @@
 package Utilities;
 
+import Pages.AmazonSearchPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,10 +17,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -25,97 +25,55 @@ import java.util.*;
 
 
 public class XMLHandler {
-    public static String GetTagValue(String Filepath, String node_xpath, Integer node_index,String TagName) {
-        String tagValue = null;
+    static Logger log = LogManager.getLogger(XMLHandler.class);
+    public static List<String> GetXPathData(String Filepath, String xpathExpression) {
+        List<String> values = new ArrayList<>();
         try {
             File file = new File(Filepath);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-            System.out.println("Root element name is: " + doc.getDocumentElement().getNodeName());
-            NodeList nodeList;
             XPath xPath = XPathFactory.newInstance().newXPath();
-            nodeList = (NodeList) xPath.compile(node_xpath).evaluate(
+            NodeList nodes;
+            nodes = (NodeList) xPath.compile(xpathExpression).evaluate(
                     doc, XPathConstants.NODESET);
-            Node node = nodeList.item(node_index);
-            Element element = (Element) node;
-            tagValue = element.getElementsByTagName(TagName).item(0).getTextContent();
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            e.printStackTrace();
-        }
-        return tagValue;
-    }
-    public static Map<String, String> GetData(String Filepath, String node_xpath, Integer node_index) {
-        Map<String, String> data = new HashMap<>();
-        try {
-            File file = new File(Filepath);
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);
-            doc.getDocumentElement().normalize();
-            NodeList nodeList;
-
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            nodeList = (NodeList) xPath.compile(node_xpath).evaluate(
-                    doc, XPathConstants.NODESET);
-            Node node = nodeList.item(node_index);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                data.put("TC_NAME", element.getElementsByTagName("TC_NAME").item(0).getTextContent());
-                data.put("BROWSER", element.getElementsByTagName("BROWSER").item(0).getTextContent());
-                data.put("USERNAME", element.getElementsByTagName("USERNAME").item(0).getTextContent());
-                data.put("PASSWORD", element.getElementsByTagName("PASSWORD").item(0).getTextContent());
-                data.put("PRODUCT", element.getElementsByTagName("PRODUCT").item(0).getTextContent());
-                data.put("EMAIL", element.getElementsByTagName("EMAIL").item(0).getTextContent());
-                data.put("NAME", element.getElementsByTagName("NAME").item(0).getTextContent());
-                data.put("MOBILE", element.getElementsByTagName("MOBILE").item(0).getTextContent());
-                data.put("ADDRESS", element.getElementsByTagName("ADDRESS").item(0).getTextContent());
-                data.put("SEARCHITEM", element.getElementsByTagName("SEARCHITEM").item(0).getTextContent());
+            for (int i = 0; i < nodes.getLength(); i++) {
+                values.add(nodes.item(i).getNodeValue());
             }
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
             e.printStackTrace();
         }
-        return data;
+        return values;
     }
 
-    public static List<Map<String, String>> GetAllData(String Filepath, String node_xpath) {
-        List<Map<String, String>> xmlData = new ArrayList<>();
+
+    public static String updateXML(String Filepath, String xpathExpression, String newValue)
+    {
         try {
             File file = new File(Filepath);
-            //Create a new object of DocumentBuilderFactory
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            //Create an object DocumentBuilder to parse the XML file data
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(file);
-            doc.getDocumentElement().normalize();
-            NodeList nodeList;
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            nodeList = (NodeList) xPath.compile(node_xpath).evaluate(
-                    doc, XPathConstants.NODESET);
-            Map<String, String> data = new HashMap<>();
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-                System.out.println("\n" + "(" + i + ")" + " Child Node Name :" + node.getNodeName());
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    data.put("TC_NAME", element.getElementsByTagName("TC_NAME").item(0).getTextContent());
-                    data.put("BROWSER", element.getElementsByTagName("BROWSER").item(0).getTextContent());
-                    data.put("USERNAME", element.getElementsByTagName("USERNAME").item(0).getTextContent());
-                    data.put("PASSWORD", element.getElementsByTagName("PASSWORD").item(0).getTextContent());
-                    data.put("PRODUCT", element.getElementsByTagName("PRODUCT").item(0).getTextContent());
-                    data.put("EMAIL", element.getElementsByTagName("EMAIL").item(0).getTextContent());
-                    data.put("NAME", element.getElementsByTagName("NAME").item(0).getTextContent());
-                    data.put("MOBILE", element.getElementsByTagName("MOBILE").item(0).getTextContent());
-                    data.put("ADDRESS", element.getElementsByTagName("ADDRESS").item(0).getTextContent());
-                    data.put("SEARCHITEM", element.getElementsByTagName("SEARCHITEM").item(0).getTextContent());
-                }
-                xmlData.add(data);
-            }
-        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = builderFactory.newDocumentBuilder();
+            Document document;
+            document = builder.parse(file);
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            Element element = (Element)xpath.evaluate(xpathExpression, document, XPathConstants.NODE);
+            element.setTextContent(newValue);
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            StringWriter stringWriter = new StringWriter();
+            StreamResult result = new StreamResult(stringWriter);
+            StreamResult resultToFile = new StreamResult(new File(Filepath));
+            transformer.transform(domSource, resultToFile);
+            transformer.transform(domSource, result);
+            Filepath = stringWriter.toString();
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
-        return xmlData;
+        return Filepath;
     }
 
     public static String transformToXML(Map<String, String> pathValueMap, String delimiter, String Filepath)
@@ -166,8 +124,7 @@ public class XMLHandler {
                         j++;
                     }
                 } else {
-                    // ignore any other root - add logger
-                    System.out.println("Data not processed for node: " + pair.getValue());
+                    log.info("Data not processed for node: " + pair.getValue());
                 }
             }
         }
@@ -185,11 +142,12 @@ public class XMLHandler {
     public static void deletexml(String filepath) {
         File Obj = new File(filepath);
         if (Obj.delete()) {
-            System.out.println("The deleted file is : " + Obj.getName());
+            log.info("The deleted file is : " + Obj.getName());
         } else {
-            System.out.println("Failed in deleting the file.");
+            log.info("Failed in deleting the file.");
         }
     }
+
 
 }
 

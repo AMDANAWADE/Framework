@@ -1,4 +1,8 @@
 package Utilities;
+import Pages.LoginPage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,6 +11,7 @@ import java.util.List;
 
 public class TextFileHandler {
         private String filepath;
+        static Logger log = LogManager.getLogger(TextFileHandler.class);
         public TextFileHandler() {
 
         }
@@ -22,10 +27,6 @@ public class TextFileHandler {
                 }
                 br.close();
                 return readData;
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-                return null;
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -37,9 +38,6 @@ public class TextFileHandler {
             String data = "";
             try {
                 data = new String(Files.readAllBytes(Paths.get(filepath)));
-            } catch (IOException e) {
-
-                e.printStackTrace();
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -60,12 +58,6 @@ public class TextFileHandler {
                     data += line + "\n";
                 }
                 br.close();
-            } catch (FileNotFoundException e) {
-
-                e.printStackTrace();
-            } catch (IOException e) {
-
-                e.printStackTrace();
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -84,9 +76,6 @@ public class TextFileHandler {
                 writer.write("\r\n");
                 bw.close();
                 writer.close();
-            } catch (IOException e) {
-
-                e.printStackTrace();
             } catch (Exception e) {
 
                 e.printStackTrace();
@@ -97,10 +86,7 @@ public class TextFileHandler {
             File f = new File(filepath);
             try {
                 newFile = f.createNewFile();
-                System.out.println("File Created: " + newFile);
-            } catch (IOException e) {
-
-                e.printStackTrace();
+               log.info("File Created: " + newFile);
             } catch (Exception e) {
 
                 e.printStackTrace();

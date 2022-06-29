@@ -1,14 +1,12 @@
 package Utilities;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.time.Duration;
 
 public class CommonWebActions {
@@ -123,4 +121,9 @@ public class CommonWebActions {
         ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)", "");
     }
 
+    public String getScreenShotAsBase64() throws IOException {
+        String source = ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BASE64);
+        String base64img= "data:image/jpeg;base64, ";
+        return base64img+source;
+    }
 }

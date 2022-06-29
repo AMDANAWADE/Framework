@@ -10,20 +10,20 @@ import java.util.Scanner;
 
 public class FileHandler {
 
-    public boolean checkFileExists(String file_path) {
-        return Files.exists(Path.of(file_path));
-    }
+//    public boolean checkFileExists(String file_path) {
+//        return Files.exists(Path.of(file_path));
+//    }
 
     //To create a file
-    public static void create_file(String filePath) {
-        try {
-            Files.createFile(Path.of(filePath));
-        } catch (IOException e) {
-            //throw new RuntimeException(e);
-            System.out.println("An error has occurred.");
-            e.printStackTrace();
-        }
-    }
+//    public static void create_file(String filePath) {
+//        try {
+//            Files.createFile(Path.of(filePath));
+//        } catch (IOException e) {
+//            //throw new RuntimeException(e);
+//            System.out.println("An error has occurred.");
+//            e.printStackTrace();
+//        }
+//    }
 
     //To write a file
     public static void write_file(String msg, String file_path)

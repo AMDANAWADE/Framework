@@ -3,12 +3,13 @@ package Utilities;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import org.apache.logging.log4j.ThreadContext;
 import org.testng.*;
-import ui_tests.BaseClass;
 
 
-public class ListenersImplementation extends BaseClass implements ITestListener, ISuiteListener {
+public class ListenersImplementation implements ITestListener, ISuiteListener {
+    static ExtentReports report;
+    ExtentTest test;
+
     public void onTestFailedButWithinSuccessPercentage(ITestResult Result) {
     }
 
@@ -26,6 +27,7 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
     public void onTestStart(ITestResult Result) {
         test = report.createTest(Result.getMethod().getMethodName());
         ExtentFactory.getInstance().setExtent(test);
+
     }
 
     public void onTestSuccess(ITestResult Result) {
@@ -39,7 +41,6 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
 
     public void onStart(ISuite iSuite) {
         report = ExtentSetup.setupExtentReport();
-        ThreadContext.put("ClassName",iSuite.getName()+System.currentTimeMillis()+".txt");
     }
 
 }

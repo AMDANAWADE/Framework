@@ -1,12 +1,10 @@
 package runner;
 
-import Utilities.CommonUtil;
 import Utilities.ExcelHandling;
 import Utilities.ListenersImplementation;
 import Utilities.PropertiesFileHandler;
 import org.testng.ITestNGListener;
 import org.testng.TestNG;
-import org.testng.asserts.SoftAssert;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
 import org.testng.xml.XmlSuite;
@@ -15,16 +13,17 @@ import org.testng.xml.XmlTest;
 import java.util.*;
 
 public class Runner {
-    public static Map<String, String> ui_tests = new HashMap<>();
+    public static Map<String, String> api_tests = new HashMap<>();
+    public static Map<String, Integer> tc_names = new HashMap<>();
+    public static ExcelHandling excelHandlingRunner;
 
     public static void main(String[] args) {
         PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
         String runnerFile = prop.getProperty("RUNNER_FILE_PATH");
         List<Map<String, String>> testcases = new LinkedList<>();
         List<java.lang.Class<? extends ITestNGListener>> listeners = new ArrayList<>();
-        SoftAssert softAssert = new SoftAssert();
         if (runnerFile != null) {
-            ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
+            excelHandlingRunner = new ExcelHandling(runnerFile, 0);
             int col_index = excelHandlingRunner.get_column_index_having_value(0, "EXECUTE");
             int row_index = excelHandlingRunner.get_row_index(col_index, "YES");
             List<Integer> row_indexes = excelHandlingRunner.get_row_indexes_having_value_in_column(row_index, col_index, "YES");
@@ -42,7 +41,6 @@ public class Runner {
             List<XmlClass> xmlClasses = new ArrayList<XmlClass>();
             Set<String> classNames = new HashSet<>();
             Set<String> tc_methods = new HashSet<>();
-            Set<String> allClassMethods;
             XmlSuite testSuite = new XmlSuite();
             testSuite.setParallel(XmlSuite.ParallelMode.TESTS);
             XmlTest parallelTests = new XmlTest(testSuite);
@@ -56,17 +54,23 @@ public class Runner {
                 XmlClass tc_class = null;
                 if (testcase.get("TC_TYPE").equalsIgnoreCase("Web")) {
                     tc_class = new XmlClass(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
-                    ui_tests.put(testcase.get("TC_NAME"), testcase.get("TC_METHOD"));
+
                     classNames.add(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
                 } else if (testcase.get("TC_TYPE").equalsIgnoreCase("API")) {
                     tc_class = new XmlClass(prop.getProperty("API_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
                     classNames.add(prop.getProperty("API_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
+                    api_tests.put(testcase.get("TC_NAME"), testcase.get("TC_METHOD"));
                 }
                 xmlClasses.add(tc_class);
                 if (tc_class == null)
                     continue;
+                int col_index = excelHandlingRunner.get_column_index_having_value(0, "TC_NAME");
+                int row_index = excelHandlingRunner.get_row_index(col_index, testcase.get("TC_NAME"));
                 List<XmlInclude> methods = new ArrayList<>();
-                methods.add(new XmlInclude(testcase.get("TC_METHOD")));
+                XmlInclude method = new XmlInclude(testcase.get("TC_METHOD"));
+                method.setDescription(testcase.get("TC_NAME"));
+                tc_names.put(testcase.get("TC_NAME"), row_index);
+                methods.add(method);
                 tc_methods.add(testcase.get("TC_METHOD"));
                 tc_class.setIncludedMethods(methods);
                 if (testcase.get("PARALLEL").equalsIgnoreCase("Yes")) {
@@ -75,11 +79,7 @@ public class Runner {
                     sequentialTests.getClasses().add(tc_class);
                 }
             }
-            allClassMethods = CommonUtil.getMethods(classNames);
-            for (String tc_method : tc_methods) {
-                boolean value = allClassMethods.contains(tc_method);
-                softAssert.assertTrue(value);
-            }
+
 
             List<XmlSuite> suites = new ArrayList<>();
             suites.add(testSuite);

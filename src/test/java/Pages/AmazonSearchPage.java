@@ -2,18 +2,13 @@ package Pages;
 
 import Utilities.CommonWebActions;
 import Utilities.ExtentFactory;
+import Utilities.Log;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
-import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import ui_tests.BaseClass;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,28 +28,26 @@ public class AmazonSearchPage {
     By add_to_cart_btn = By.xpath("//*[@id='add-to-cart-button']");
     By cart_btn = By.xpath("//*[@id=\"nav-cart-count-container\"]/span[2]");
     By proceed_to_buy_btn = By.xpath("//*[@id=\"sc-buy-box-ptc-button\"]/span/input");
-    static Logger log = LogManager.getLogger(AmazonSearchPage.class);
 
-    public void searchProduct(String searchinput) throws IOException {
+    public void search_product(String searchinput) throws IOException {
         CommonWebActions webActions = new CommonWebActions(driver);
-        BaseClass baseClass = new BaseClass();
         ExtentFactory.getInstance().getExtent().log(Status.INFO, "Entering search product name");
-        log.info("Entering search product name");
+        Log.info("Entering search product name");
         driver.findElement(searchBox).sendKeys(searchinput);
         ExtentFactory.getInstance().getExtent().pass("Searching the product", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Entered search product name");
-        log.info("Entered search product name");
+        Log.info("Entered search product name");
         driver.findElement(search_btn).click();
-        log.info("Cliked search button");
+        Log.info("Cliked search button");
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Clicking search button");
-        log.info("Clicking on product");
+        Log.info("Clicking on product");
         driver.findElement(amazonProductLink).click();
-        log.info("Clicked search button");
+        Log.info("Clicked search button");
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Selected product");
         ExtentFactory.getInstance().getExtent().pass("Selected product", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
     }
 
-    public void AddtoCart() throws InterruptedException, IOException {
+    public void add_to_cart() throws InterruptedException, IOException {
         CommonWebActions webActions = new CommonWebActions(driver);
         List<String> windows = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(windows.get(1));
@@ -64,12 +57,12 @@ public class AmazonSearchPage {
         } else {
             driver.findElement(add_to_cart_btn).click();
             webActions.wait(3000);
-            log.info("Clicking on add to cart button");
+            Log.info("Clicking on add to cart button");
             ExtentFactory.getInstance().getExtent().log(Status.PASS, "Added product to cart");
-            log.info("Clicked on add to cart button");
+            Log.info("Clicked on add to cart button");
             WebElement cartButton = driver.findElement(cart_btn);
             webActions.clickElement(cartButton);
-            log.info("Clicked on cart button");
+            Log.info("Clicked on cart button");
         }
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Clicked on Cart");
         ExtentFactory.getInstance().getExtent().pass("Added product to cart", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
@@ -77,22 +70,22 @@ public class AmazonSearchPage {
     }
 
 
-    public void proceedToBuy() throws IOException {
-    CommonWebActions webActions = new CommonWebActions(driver);
+    public void proceed_to_buy() throws IOException {
+        CommonWebActions webActions = new CommonWebActions(driver);
         List<String> windows = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(windows.get(1));
-        List<WebElement> proceedToBuyButton = driver.findElements(By.xpath("//*[@id=\"sc-buy-box-ptc-button\"]/span/input"));
+        List<WebElement> proceedToBuyButton = driver.findElements(proceed_to_buy_btn);
         if ((proceedToBuyButton.size()) == 0) {
         } else {
-            log.info("Clicking on proceed to buy");
+            Log.info("Clicking on proceed to buy");
             ExtentFactory.getInstance().getExtent().log(Status.INFO, "Adding product to cart");
-            driver.findElement(By.xpath("//*[@id=\"sc-buy-box-ptc-button\"]/span/input")).click();
-            log.info("Clicked on proceed to buy");
+            driver.findElement(proceed_to_buy_btn).click();
+            Log.info("Clicked on proceed to buy");
         }
-        log.info("Getting page title");
+        Log.info("Getting page title");
         String title = driver.getTitle();
         Assert.assertEquals(title, "Amazon Sign In");
-        log.info("Verified page title");
+        Log.info("Verified page title");
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Verified page title");
         ExtentFactory.getInstance().getExtent().pass("Verified Page title", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
     }

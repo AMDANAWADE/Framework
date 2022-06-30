@@ -14,6 +14,18 @@ public class ExcelHandling implements IDataHandler {
     private Sheet sh;
     private int headerRow = 0;
 
+    public ExcelHandling(String file_location, String sheet_name) {
+
+        this.filePath = "resources\\" + file_location;
+        this.sheetName = sheet_name;
+        try {
+            this.wb = WorkbookFactory.create(new FileInputStream(filePath));
+            this.sh = wb.getSheet(sheetName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ExcelHandling(String file_location, int sheet_no) {
         this.filePath = file_location;
         this.sheetNo = sheet_no;

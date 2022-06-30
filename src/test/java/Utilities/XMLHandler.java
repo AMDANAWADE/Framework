@@ -1,11 +1,9 @@
 package Utilities;
 
-import Pages.AmazonSearchPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -17,15 +15,22 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.*;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 public class XMLHandler {
     static Logger log = LogManager.getLogger(XMLHandler.class);
+
     public static List<String> GetXPathData(String Filepath, String xpathExpression) {
         List<String> values = new ArrayList<>();
         try {
@@ -48,8 +53,7 @@ public class XMLHandler {
     }
 
 
-    public static String updateXML(String Filepath, String xpathExpression, String newValue)
-    {
+    public static String updateXML(String Filepath, String xpathExpression, String newValue) {
         try {
             File file = new File(Filepath);
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -57,7 +61,7 @@ public class XMLHandler {
             Document document;
             document = builder.parse(file);
             XPath xpath = XPathFactory.newInstance().newXPath();
-            Element element = (Element)xpath.evaluate(xpathExpression, document, XPathConstants.NODE);
+            Element element = (Element) xpath.evaluate(xpathExpression, document, XPathConstants.NODE);
             element.setTextContent(newValue);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -68,9 +72,7 @@ public class XMLHandler {
             transformer.transform(domSource, resultToFile);
             transformer.transform(domSource, result);
             Filepath = stringWriter.toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Filepath;
@@ -124,7 +126,7 @@ public class XMLHandler {
                         j++;
                     }
                 } else {
-                    log.info("Data not processed for node: " + pair.getValue());
+                    Log.info("Data not processed for node: " + pair.getValue());
                 }
             }
         }
@@ -142,9 +144,9 @@ public class XMLHandler {
     public static void deletexml(String filepath) {
         File Obj = new File(filepath);
         if (Obj.delete()) {
-            log.info("The deleted file is : " + Obj.getName());
+            Log.info("The deleted file is : " + Obj.getName());
         } else {
-            log.info("Failed in deleting the file.");
+            Log.info("Failed in deleting the file.");
         }
     }
 

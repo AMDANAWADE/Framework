@@ -9,13 +9,14 @@ import java.io.*;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-public class CsvHandling implements IDataHandler{
+public class CsvHandling implements IDataHandler {
     private String filePath;
     private int sheetNo = 0;
     private Workbook wb;
     private Sheet sh;
     private int headerRow = 0;
     static Logger log = LogManager.getLogger(LoginPage.class);
+
     public CsvHandling(String file_location, String sheet_name) {
         this.filePath = file_location;
         try {
@@ -104,6 +105,7 @@ public class CsvHandling implements IDataHandler{
         });
         return Collections.unmodifiableMap(dataMap);
     }
+
     public int getRowSize() {
         return sh.getLastRowNum() + 1;
     }
@@ -133,7 +135,7 @@ public class CsvHandling implements IDataHandler{
             }
             return Data;
         } catch (FileNotFoundException e) {
-            log.info("File not found! check the correct file path.");
+            Log.info("File not found! check the correct file path.");
         }
         return null;
     }
@@ -149,11 +151,12 @@ public class CsvHandling implements IDataHandler{
             }
             return last;
         } catch (FileNotFoundException e) {
-            log.info("File not found! check the correct file path.");
+            Log.info("File not found! check the correct file path.");
         }
         return null;
 
     }
+
     @Override
     public List<Map<String, String>> getAllData() {
         List<String> headerNames = get_header_names();

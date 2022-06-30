@@ -123,7 +123,7 @@ public class CommonWebActions {
 
     public String getScreenShotAsBase64() throws IOException {
         String source = ((TakesScreenshot) this.driver).getScreenshotAs(OutputType.BASE64);
-        String base64img= "data:image/jpeg;base64, ";
-        return base64img+source;
+        String base64img = "data:image/jpeg;base64, ";
+        return base64img + source;
     }
 }

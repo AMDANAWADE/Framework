@@ -6,13 +6,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class ExcelHandling {
+public class ExcelHandling implements IDataHandler {
     private String filePath;
     private String sheetName = null;
     private int sheetNo = 0;
     private Workbook wb;
     private Sheet sh;
     private int headerRow = 0;
+
+    public ExcelHandling(String file_location, String sheet_name) {
+
+        this.filePath = "resources\\" + file_location;
+        this.sheetName = sheet_name;
+        try {
+            this.wb = WorkbookFactory.create(new FileInputStream(filePath));
+            this.sh = wb.getSheet(sheetName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public ExcelHandling(String file_location, int sheet_no) {
         this.filePath = file_location;
@@ -47,6 +59,10 @@ public class ExcelHandling {
             e.printStackTrace();
         }
         return colCount;
+    }
+
+    public int getRowSize() {
+        return sh.getLastRowNum() + 1;
     }
 
     public String get_cell_value(int row_no, int column_no) {
@@ -108,6 +124,7 @@ public class ExcelHandling {
         return colNames;
     }
 
+    @Override
     public Map<String, String> getData(int rowNum) {
         if (isEmptyRow(rowNum))
             return Collections.emptyMap();
@@ -122,27 +139,63 @@ public class ExcelHandling {
         return Collections.unmodifiableMap(dataMap);
     }
 
-    public List<Map<String, String>> getTestCases(List<Integer> row_indexes) {
+    public List<Map<String, String>> get_test_cases(List<Integer> row_indexes) {
         List<Map<String, String>> testcases = new ArrayList<>();
-        for(int i=0;i<row_indexes.size();i++)
-        {
-           testcases.add(getData(row_indexes.get(i)));
+        for (int i = 0; i < row_indexes.size(); i++) {
+            testcases.add(getData(row_indexes.get(i)));
         }
         return testcases;
     }
-    public List<String> getValues(List<Integer> row_indexes, String key)
-    {
-        List<Map<String, String>> testcases = getTestCases(row_indexes);
+
+    public List<String> get_values(List<Integer> row_indexes, String key) {
+        List<Map<String, String>> testcases = get_test_cases(row_indexes);
         List<String> values = new ArrayList<>();
         for (int i = 0; i < testcases.size(); i++) {
             values.add(testcases.get(i).get(key));
         }
         return values;
     }
-    public Map<String,String> getInputData(String testCaseName) {
-        int col_index = get_column_index_having_value(0, "TC_NAME");
-        int row_index = get_row_index(col_index, testCaseName);
-        Map<String, String> inputData = getData(row_index);
-        return inputData;
+
+
+    public Map<String, String> get_test_details_using_classname_and_method(String method_name, String class_name, String method_col, String class_name_col) {
+        int method_col_index = get_column_index_having_value(0, method_col);
+        int class_col_index = get_column_index_having_value(0, class_name_col);
+        Map<String, String> data = new HashMap<>();
+        for (int i = 0; i < getTotalRowCount(); i++) {
+            if (get_cell_value(i, method_col_index).equalsIgnoreCase(method_name)) {
+                if (get_cell_value(i, class_col_index).equalsIgnoreCase(class_name))
+                    data = getData(i);
+            }
+        }
+        return data;
+    }
+
+    public Map<String, String> get_single_test_details(String name, String col_name) {
+        int col_index = get_column_index_having_value(0, col_name);
+        int row_index = get_row_index(col_index, name);
+        Map<String, String> data = getData(row_index);
+        return data;
+    }
+
+    @Override
+    public List<Map<String, String>> getAllData() {
+        List<String> headerNames = get_header_names();
+        int no_of_rows = getRowSize();
+        List<Map<String, String>> dataList = new ArrayList<>();
+        for (int i = 1; i < no_of_rows - 1; i++) {
+            Row row = sh.getRow(i);
+            if (isEmptyRow(i))
+                continue;
+            Map<String, String> dataMap = new LinkedHashMap<>();
+            for (Cell cell : row) {
+                int index = cell.getColumnIndex();
+                if (headerNames.get(index).trim().length() > 0)
+                    dataMap.put(headerNames.get(index).trim(), get_cell_value(cell.getRowIndex(), cell.getColumnIndex()));
+            }
+            ;
+            dataList.add(dataMap);
+        }
+        return Collections.unmodifiableList(dataList);
     }
 }
+

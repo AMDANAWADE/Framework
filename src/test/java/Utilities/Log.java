@@ -44,7 +44,7 @@ public class Log { //Initialize Log4j instance
 
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 
-        builder.setStatusLevel(Level.DEBUG);
+        builder.setStatusLevel(Level.INFO);
         builder.setConfigurationName("DefaultLogger");
 
         // create a rolling file appender
@@ -60,7 +60,7 @@ public class Log { //Initialize Log4j instance
                 .addComponent(triggeringPolicy);
         appenderBuilder.add(builder.newLayout("PatternLayout")
                 .addAttribute("pattern", pattern));
-        RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.DEBUG);
+        RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
         builder.add(appenderBuilder);
 
         rootLogger.add(builder.newAppenderRef("LogToRollingFile"));

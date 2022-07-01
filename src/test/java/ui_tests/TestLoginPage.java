@@ -19,7 +19,6 @@ public class TestLoginPage extends BaseClass {
         loginPage.login();
         loginPage.enter_email(input_data.get("EMAIL"));
         loginPage.enter_password(input_data.get("PASSWORD"));
-        loginPage.verify_username_on_page_after_sign_in(input_data.get("USERNAME"));
     }
     //This method is to verify home page title
     @Test(dataProvider = "input_data")

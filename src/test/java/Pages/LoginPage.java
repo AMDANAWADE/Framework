@@ -23,7 +23,6 @@ public class LoginPage {
     By Continue = By.xpath("//input[@id='continue']");
     By Password = By.xpath("//input[@type='password']");
     By signin = By.id("signInSubmit");
-    By title_after_signin = By.xpath("contains(@id,\"nav-link-accountList-nav-line-1\")]");
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -70,12 +69,6 @@ public class LoginPage {
         Log.info("Sign in Button is clicked");
     }
 
-    public void verify_username_on_page_after_sign_in(String username) throws IOException {
-        CommonWebActions webActions = new CommonWebActions(driver);
-        String text = webActions.getWebElement(title_after_signin).getText();
-        Log.info("Verified username on page after sign in");
-        Assert.assertEquals(text,username);
-    }
     public void verify_homepage() {
         String ActualTitle = driver.getTitle();
         ExtentFactory.getInstance().getExtent().log(Status.INFO, "Getting page title");

@@ -87,8 +87,6 @@ public class AmazonSearchPage {
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Verified page title");
         ExtentFactory.getInstance().getExtent().pass("Verified Page title", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
     }
-
-
 }
 
 

@@ -79,8 +79,6 @@ public class Runner {
                     sequentialTests.getClasses().add(tc_class);
                 }
             }
-
-
             List<XmlSuite> suites = new ArrayList<>();
             suites.add(testSuite);
             TestNG tng = new TestNG();

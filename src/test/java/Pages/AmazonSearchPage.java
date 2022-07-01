@@ -68,8 +68,6 @@ public class AmazonSearchPage {
         ExtentFactory.getInstance().getExtent().pass("Added product to cart", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
 
     }
-
-
     public void proceed_to_buy() throws IOException {
         CommonWebActions webActions = new CommonWebActions(driver);
         List<String> windows = new ArrayList<String>(driver.getWindowHandles());

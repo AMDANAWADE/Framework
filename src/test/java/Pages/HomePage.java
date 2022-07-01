@@ -51,7 +51,7 @@ public class HomePage {
         ExtentFactory.getInstance().getExtent().pass("Opened order page", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
     }
 
-    public void click_lang() throws IOException {
+    public void click_on_language_options() throws IOException {
         CommonWebActions webActions = new CommonWebActions(driver);
         ExtentFactory.getInstance().getExtent().log(Status.INFO, "Click on select languages");
         Log.info("Click on select languages");
@@ -61,7 +61,6 @@ public class HomePage {
         Log.info("Verified Languages Page Title");
         ExtentFactory.getInstance().getExtent().log(Status.INFO, "Clicked on select languages");
         ExtentFactory.getInstance().getExtent().pass("Opened Language settings", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
-
     }
 
 }

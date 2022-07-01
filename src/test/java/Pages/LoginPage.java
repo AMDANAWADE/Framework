@@ -5,6 +5,8 @@ import Utilities.ExtentFactory;
 import Utilities.Log;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,7 +23,7 @@ public class LoginPage {
     By Continue = By.xpath("//input[@id='continue']");
     By Password = By.xpath("//input[@type='password']");
     By signin = By.id("signInSubmit");
-
+    By title_after_signin = By.xpath("contains(@id,\"nav-link-accountList-nav-line-1\")]");
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -63,11 +65,17 @@ public class LoginPage {
         ExtentFactory.getInstance().getExtent().log(Status.PASS, "Password Entered");
         ExtentFactory.getInstance().getExtent().pass("Password entered", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
         WebElement click_signin = webActions.getWebElement(signin);
-        Log.info("Clicking Signin button");
+        Log.info("Clicking Sign in button");
         webActions.clickButton(click_signin);
-        Log.info("Signin Button is clicked");
+        Log.info("Sign in Button is clicked");
     }
 
+    public void verify_username_on_page_after_sign_in(String username) throws IOException {
+        CommonWebActions webActions = new CommonWebActions(driver);
+        String text = webActions.getWebElement(title_after_signin).getText();
+        Log.info("Verified username on page after sign in");
+        Assert.assertEquals(text,username);
+    }
     public void verify_homepage() {
         String ActualTitle = driver.getTitle();
         ExtentFactory.getInstance().getExtent().log(Status.INFO, "Getting page title");

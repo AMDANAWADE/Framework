@@ -19,10 +19,10 @@ public class TestHomePage extends BaseClass {
     }
     //This method is to verify language settings page title
     @Test(dataProvider = "input_data")
-    public void test_lang(Map<String, String> input_data) throws InterruptedException, IOException {
+    public void test_language(Map<String, String> input_data) throws InterruptedException, IOException {
         openBrowser(input_data.get("BROWSER"));
         HomePage homePage = new HomePage(DriverFactory.getDriver());
-        homePage.click_lang();
+        homePage.click_on_language_options();
     }
 
 

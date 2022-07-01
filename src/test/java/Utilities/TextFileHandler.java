@@ -1,8 +1,5 @@
 package Utilities;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +11,11 @@ public class TextFileHandler {
 
     }
 
+    /***
+     * This method is to read text file
+     * @param filepath is text file location
+     * @return returns list of all lines in text file
+     */
     public List<String> Read_Text_File_Line_To_Line(String filepath) {
         List<String> readData = new ArrayList<String>();
         File f = new File(filepath);
@@ -32,6 +34,11 @@ public class TextFileHandler {
         }
     }
 
+    /***
+     * This method is get complete text from text file as string
+     * @param filepath is text file location
+     * @return returns complete data as string
+     */
     public String read_whole_TextFile(String filepath) {
         String data = "";
         try {
@@ -43,7 +50,11 @@ public class TextFileHandler {
         return data;
     }
 
-
+    /***
+     * This method is to return text file data as string
+     * @param filepath is text file location
+     * @return returns text file data as string
+     */
     public String readFile_Store_Data(String filepath) {
         String data = "";
         File f = new File(filepath);
@@ -63,8 +74,12 @@ public class TextFileHandler {
         return data;
     }
 
-
-    public void write_Text_File(String filepath,String strContent) {
+    /***
+     * This method is to write data to text file
+     * @param filepath is text file path
+     * @param strContent is data to be written into text file
+     */
+    public void write_Text_File(String filepath, String strContent) {
         File f = new File(filepath);
         BufferedWriter bw;
         try {
@@ -80,6 +95,11 @@ public class TextFileHandler {
         }
     }
 
+    /***
+     * This method is to create new text file
+     * @param filepath is text file location
+     * @return returns true if file is created successfully, false otherwise
+     */
     public boolean create_new_TextFile(String filepath) {
         boolean newFile = false;
         File f = new File(filepath);

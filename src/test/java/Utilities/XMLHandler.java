@@ -1,7 +1,5 @@
 package Utilities;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -29,8 +27,13 @@ import java.util.Map;
 
 
 public class XMLHandler {
-    static Logger log = LogManager.getLogger(XMLHandler.class);
 
+    /***
+     * This method is to get data by sending xpath expression
+     * @param Filepath is xml file location
+     * @param xpathExpression is xpath expression of the data to be fetched
+     * @return returns the value as a list
+     */
     public static List<String> GetXPathData(String Filepath, String xpathExpression) {
         List<String> values = new ArrayList<>();
         try {
@@ -52,7 +55,13 @@ public class XMLHandler {
         return values;
     }
 
-
+    /***
+     * This method is to update a value in xml file using xpath expression
+     * @param Filepath is xml file location
+     * @param xpathExpression is xpath expression
+     * @param newValue is new value to be updated
+     * @return returns the file path
+     */
     public static String updateXML(String Filepath, String xpathExpression, String newValue) {
         try {
             File file = new File(Filepath);
@@ -78,6 +87,15 @@ public class XMLHandler {
         return Filepath;
     }
 
+    /***
+     * This method is to write data into xml file
+     * @param pathValueMap  the map contains key value pairs of data to be written in xml file
+     * @param delimiter delimiter value
+     * @param Filepath xml file location
+     * @return returns the data in xml format
+     * @throws ParserConfigurationException
+     * @throws TransformerException
+     */
     public static String transformToXML(Map<String, String> pathValueMap, String delimiter, String Filepath)
             throws ParserConfigurationException, TransformerException {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -141,6 +159,10 @@ public class XMLHandler {
         return writer.toString();
     }
 
+    /***
+     * This method is to delete xml file
+     * @param filepath is xml file location
+     */
     public static void deletexml(String filepath) {
         File Obj = new File(filepath);
         if (Obj.delete()) {

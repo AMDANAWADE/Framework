@@ -13,7 +13,11 @@ public class ExcelHandling implements IDataHandler {
     private Workbook wb;
     private Sheet sh;
     private int headerRow = 0;
-
+    /***
+     * Constructor to initialize the workbook using file location and sheet name
+     * @param file_location file path is passed as string
+     * @param sheet_name is sheet name in file
+     */
     public ExcelHandling(String file_location, String sheet_name) {
 
         this.filePath = "resources\\" + file_location;
@@ -25,7 +29,11 @@ public class ExcelHandling implements IDataHandler {
             throw new RuntimeException(e);
         }
     }
-
+    /***
+     * Constructor to initialize the workbook using file location and sheet number
+     * @param file_location file path is passed as string
+     * @param sheet_no is sheet number in file
+     */
     public ExcelHandling(String file_location, int sheet_no) {
         this.filePath = file_location;
         this.sheetNo = sheet_no;
@@ -37,6 +45,10 @@ public class ExcelHandling implements IDataHandler {
         }
     }
 
+    /***
+     * This method is to get total number of rows in a sheet
+     * @return returns the total number of rows
+     */
     public int getTotalRowCount() {
         int rowCount = 0;
         try {
@@ -49,6 +61,10 @@ public class ExcelHandling implements IDataHandler {
         return rowCount;
     }
 
+    /***
+     * This method is to get total number of columns
+     * @return  returns the total number of columns
+     */
     public int getColCount() {
         int colCount = 0;
         try {
@@ -61,14 +77,29 @@ public class ExcelHandling implements IDataHandler {
         return colCount;
     }
 
+    /***
+     * This method is to row size in a file
+     * @return row size
+     */
     public int getRowSize() {
         return sh.getLastRowNum() + 1;
     }
-
+    /***
+     * This method is to get single cell value using row number and column number
+     * @param row_no is row number
+     * @param column_no is column number
+     * @return return single cell value
+     */
     public String get_cell_value(int row_no, int column_no) {
         return new DataFormatter().formatCellValue(sh.getRow(row_no).getCell(column_no));
     }
 
+    /***
+     * This method is to get column index that matches the given value in row
+     * @param num is row index
+     * @param value is value in row
+     * @return returns column index
+     */
     public int get_column_index_having_value(int num, String value) {
         int index = -1;
         for (int i = 0; i < getColCount(); i++) {
@@ -79,13 +110,23 @@ public class ExcelHandling implements IDataHandler {
         return index;
     }
 
-    public void get_row(int i) {
+    /***
+     * This method is to get all values in a single row
+     * @param i is row index
+     */
+    public void get_row_values(int i) {
         Row row = sh.getRow(i);
         for (Cell cell : row)
             System.out.println(cell.getStringCellValue());
 
     }
 
+    /***
+     * This method is to get row index having a value in column
+     * @param col_num is column number
+     * @param value is column value
+     * @return returns row index that matches with value in a column
+     */
     public int get_row_index(int col_num, String value) {
         int index = -1;
         for (int row_num = 0; row_num < getTotalRowCount(); row_num++) {
@@ -96,12 +137,22 @@ public class ExcelHandling implements IDataHandler {
         }
         return index;
     }
-
+    /***
+     * This method is to check if row is empty
+     * @param rowNum is row index
+     * @return returns true if row is empty
+     */
     public boolean isEmptyRow(int rowNum) {
         Row rw = sh.getRow(rowNum);
         return rw == null;
     }
 
+    /***
+     * This method is to get row indexes having value in column
+     * @param col_num is column number
+     * @param value is column value
+     * @return returns list of row indexes
+     */
     public List<Integer> get_row_indexes_having_value_in_column(int start_row, int col_num, String value) {
         List<Integer> row_indexes = new ArrayList<>();
         for (int row_num = start_row; row_num < getTotalRowCount(); row_num++) {
@@ -113,7 +164,10 @@ public class ExcelHandling implements IDataHandler {
         }
         return row_indexes;
     }
-
+    /***
+     * This method is to get header names
+     * @return  returns the list of header names
+     */
     public List<String> get_header_names() {
         Row row = sh.getRow(headerRow);
         int row_len = row.getLastCellNum();
@@ -123,7 +177,11 @@ public class ExcelHandling implements IDataHandler {
         }
         return colNames;
     }
-
+    /***
+     * This method is to get single row data
+     * @param rowNum is row index
+     * @return returns map of values containing header names and cell value
+     */
     @Override
     public Map<String, String> getData(int rowNum) {
         if (isEmptyRow(rowNum))
@@ -139,6 +197,11 @@ public class ExcelHandling implements IDataHandler {
         return Collections.unmodifiableMap(dataMap);
     }
 
+    /***
+     * This method is to get all data from specific rows
+     * @param row_indexes is list of row indexes
+     * @return returns a list of map contains header values as key and row value as value in map
+     */
     public List<Map<String, String>> get_test_cases(List<Integer> row_indexes) {
         List<Map<String, String>> testcases = new ArrayList<>();
         for (int i = 0; i < row_indexes.size(); i++) {
@@ -146,7 +209,11 @@ public class ExcelHandling implements IDataHandler {
         }
         return testcases;
     }
-
+    /***
+     * This method is to get data from specific rows
+     * @param row_indexes is list of row indexes
+     * @return returns a list of row values
+     */
     public List<String> get_values(List<Integer> row_indexes, String key) {
         List<Map<String, String>> testcases = get_test_cases(row_indexes);
         List<String> values = new ArrayList<>();
@@ -156,27 +223,22 @@ public class ExcelHandling implements IDataHandler {
         return values;
     }
 
-
-    public Map<String, String> get_test_details_using_classname_and_method(String method_name, String class_name, String method_col, String class_name_col) {
-        int method_col_index = get_column_index_having_value(0, method_col);
-        int class_col_index = get_column_index_having_value(0, class_name_col);
-        Map<String, String> data = new HashMap<>();
-        for (int i = 0; i < getTotalRowCount(); i++) {
-            if (get_cell_value(i, method_col_index).equalsIgnoreCase(method_name)) {
-                if (get_cell_value(i, class_col_index).equalsIgnoreCase(class_name))
-                    data = getData(i);
-            }
-        }
-        return data;
-    }
-
-    public Map<String, String> get_single_test_details(String name, String col_name) {
+    /***
+     * This method is to get single test details
+     * @param value is the row value
+     * @param col_name is column name
+     * @return returns map of key containing header names and value containing row values
+     */
+    public Map<String, String> get_single_test_details(String value, String col_name) {
         int col_index = get_column_index_having_value(0, col_name);
-        int row_index = get_row_index(col_index, name);
+        int row_index = get_row_index(col_index, value);
         Map<String, String> data = getData(row_index);
         return data;
     }
-
+    /***
+     * This method is to get all data from excel file
+     * @return returns list of map of values
+     */
     @Override
     public List<Map<String, String>> getAllData() {
         List<String> headerNames = get_header_names();

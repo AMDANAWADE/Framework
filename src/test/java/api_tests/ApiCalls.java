@@ -11,16 +11,12 @@ import java.util.Map;
 public class ApiCalls extends BaseClass {
     private static PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
     public static String jsonRequestBody;
-    public static String key = "id";
-    public static String getPath = "4";
-    public static String putPath = "2";
-    public static String deletePath = "3";
 
-    public static String putUpdateUserPayload(String jsonDataFilePath) {
+    public static String putUpdateUserPayload(String jsonDataFilePath, String name, String job) {
         try {
             jsonRequestBody = JsonHandler.readFileAsString(jsonDataFilePath);
-            jsonRequestBody = JsonHandler.editJsonValue("$.name", "gokul", jsonRequestBody);
-            jsonRequestBody = JsonHandler.editJsonValue("$.job", "dev", jsonRequestBody);
+            jsonRequestBody = JsonHandler.editJsonValue("$.name", name, jsonRequestBody);
+            jsonRequestBody = JsonHandler.editJsonValue("$.job", job, jsonRequestBody);
             return jsonRequestBody;
         } catch (Exception e) {
             Log.fatal(e.getMessage());
@@ -29,11 +25,11 @@ public class ApiCalls extends BaseClass {
     }
 
     @Test
-    public static String postSingleUserPayload(String jsonDataFilePath) {
+    public static String postSingleUserPayload(String jsonDataFilePath,String name,String job) {
         try {
             jsonRequestBody = JsonHandler.readFileAsString(jsonDataFilePath);
-            jsonRequestBody = JsonHandler.editJsonValue("$.name", "value", jsonRequestBody);
-            jsonRequestBody = JsonHandler.editJsonValue("$.job", "testing", jsonRequestBody);
+            jsonRequestBody = JsonHandler.editJsonValue("$.name", name, jsonRequestBody);
+            jsonRequestBody = JsonHandler.editJsonValue("$.job", job, jsonRequestBody);
             return jsonRequestBody;
         } catch (Exception e) {
             Log.fatal(e.getMessage());
@@ -41,11 +37,13 @@ public class ApiCalls extends BaseClass {
         return null;
     }
 
-    @Test
-    public static void getSingleUserCall() {
+    @Test(dataProvider = "input_data")
+    public static void getSingleUserCall(Map<String, String> input_data) {
+       // String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
             Log.info("Started executing get call for single user");
-            response = CommonAPIactions.getCall(CommonAPIactions.SINGLE_USER_API, key, getPath, null, null, null);
+            response = CommonAPIactions.getCall(
+                    input_data.get("ENDPOINT"), input_data.get("PATH_KEY"), input_data.get("PATH_VALUE"), null, null, null);
             CommonAPIactions.validateStatusCode(response, 200);
             JsonHandler.jsonSchemaValidation(response, prop.getProperty("GET_SINGLE_USER_SCHEMA"));
             Log.info("Get Call Executed " + response.asString());
@@ -54,12 +52,13 @@ public class ApiCalls extends BaseClass {
         }
     }
 
-    @Test
-    public static void getListUsersCall() {
+    @Test(dataProvider = "input_data")
+    public static void getListUsersCall(Map<String, String> input_data) {
+      //  String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
             Log.info("Started executing get call for list of users");
             HashMap<String, String> m = new HashMap<>();
-            m.put("page", "2");
+            m.put(input_data.get("QUERY_KEY"), input_data.get("QUERY_VALUE"));
             response = CommonAPIactions.getCall(CommonAPIactions.LIST_USER_API, null, null, null, m, null);
             CommonAPIactions.validateStatusCode(response, 200);
             Log.info("Get Call Executed " + response.asString());
@@ -70,37 +69,40 @@ public class ApiCalls extends BaseClass {
 
     @Test(dataProvider = "input_data")
     public static void postCreateUserCall(Map<String, String> input_data) {
+       // String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
             Log.info("Started executing post call for creating a user");
-            response = CommonAPIactions.postCall(CommonAPIactions.CREATE_USER_API, postSingleUserPayload(prop.getProperty("POSTJSONDATA")), null, null, null, null, null);
+            response = CommonAPIactions.postCall(input_data.get("ENDPOINT"), postSingleUserPayload(prop.getProperty("POSTJSONDATA"),input_data.get("NAME"), input_data.get("JOB")), null, null, null, null, null);
             CommonAPIactions.validateStatusCode(response, 201);
             JsonHandler.jsonSchemaValidation(response, prop.getProperty("POST_CREATE_USER_SCHEMA"));
-            validatePostSingleUserResponse(response);
+            validatePostSingleUserResponse(response, input_data.get("NAME"),input_data.get("JOB"));
             Log.info("Post Call Executed " + response.asString());
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
     }
 
-    @Test
-    public static void putUpdateUserCall() {
+    @Test(dataProvider = "input_data")
+    public static void putUpdateUserCall(Map<String, String> input_data) {
+       // String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
             Log.info("Started executing put call for updating a user");
-            response = CommonAPIactions.putCall(CommonAPIactions.UPDATE_USER_API, putUpdateUserPayload(prop.getProperty("POSTJSONDATA")), key, putPath, null, null, null);
+            response = CommonAPIactions.putCall(input_data.get("ENDPOINT"), putUpdateUserPayload(prop.getProperty("POSTJSONDATA"),input_data.get("NAME"), input_data.get("JOB")), input_data.get("PATH_KEY"), input_data.get("PATH_VALUE"),  null, null, null);
             CommonAPIactions.validateStatusCode(response, 200);
             JsonHandler.jsonSchemaValidation(response, prop.getProperty("PUT_UPDATE_USER_SCHEMA"));
-            validatePutUpdateUserResponse(response);
+            validatePutUpdateUserResponse(response,input_data.get("NAME"), input_data.get("JOB"));
             Log.info("Put Call Executed " + response.asString());
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
     }
 
-    @Test
-    public static void deleteUserCall() {
+    @Test(dataProvider = "input_data")
+    public static void deleteUserCall(Map<String, String> input_data) {
+        //String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
             Log.info("Started executing delete call for deleting a user");
-            response = CommonAPIactions.deleteCall(CommonAPIactions.DELETE_USER_API, key, deletePath, null, null, null);
+            response = CommonAPIactions.deleteCall(input_data.get("ENDPOINT"), input_data.get("PATH_KEY"), input_data.get("PATH_VALUE"),  null, null, null);
             CommonAPIactions.validateStatusCode(response, 204);
             Log.info("Delete Call Executed ");
         } catch (Exception e) {
@@ -108,13 +110,13 @@ public class ApiCalls extends BaseClass {
         }
     }
 
-    public static void validatePostSingleUserResponse(Response res) {
-        Assert.assertEquals(JsonHandler.getJsonValue(res, "name"), "value");
-        Assert.assertEquals(JsonHandler.getJsonValue(res, "job"), "testing");
+    public static void validatePostSingleUserResponse(Response res, String name, String job) {
+        Assert.assertEquals(JsonHandler.getJsonValue(res, "name"), name);
+        Assert.assertEquals(JsonHandler.getJsonValue(res, "job"), job);
     }
 
-    public static void validatePutUpdateUserResponse(Response res) {
-        Assert.assertEquals(JsonHandler.getJsonValue(res, "name"), "gokul");
-        Assert.assertEquals(JsonHandler.getJsonValue(res, "job"), "dev");
+    public static void validatePutUpdateUserResponse(Response res,String name, String job) {
+        Assert.assertEquals(JsonHandler.getJsonValue(res, "name"), name);
+        Assert.assertEquals(JsonHandler.getJsonValue(res, "job"), job);
     }
 }

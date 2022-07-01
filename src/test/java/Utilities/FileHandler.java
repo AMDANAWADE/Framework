@@ -1,9 +1,5 @@
 package Utilities;
 
-import Pages.LoginPage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,12 +10,19 @@ import java.util.Scanner;
 
 public class FileHandler {
 
+    /***
+     * This method is to check if file exists
+     * @param file_path is file location
+     * @return returns true if file exists, false otherwise
+     */
     public static boolean checkFileExists(String file_path) {
         return Files.exists(Path.of(file_path));
     }
 
-    static Logger log = LogManager.getLogger(LoginPage.class);
-
+    /***
+     * This method is to create a new file
+     * @param filePath  is file location
+     */
     public static void create_file(String filePath) {
         if (checkFileExists(filePath)) {
             try {
@@ -31,6 +34,11 @@ public class FileHandler {
         }
     }
 
+    /***
+     * This method is to write data to file
+     * @param msg is the input data
+     * @param file_path is file location
+     */
     public static void write_file(String msg, String file_path) {
         try {
             FileWriter Writer = new FileWriter(file_path);
@@ -44,12 +52,18 @@ public class FileHandler {
         }
     }
 
-    public static void read_file(String file_path) {
+    /***
+     * This method is to read data from file
+     * @param file_path is file location
+     * @return returns the data as string
+     */
+    public static String read_file(String file_path) {
+        String data = "";
         try {
             File file = new File(file_path);
             Scanner Reader = new Scanner(file);
             while (Reader.hasNextLine()) {
-                String data = Reader.nextLine();
+                data += Reader.nextLine();
                 Log.info("The data present in file is:" + data);
             }
             Reader.close();
@@ -57,8 +71,13 @@ public class FileHandler {
             Log.info("An error has occurred.");
             e.printStackTrace();
         }
+        return data;
     }
 
+    /***
+     * This methodis to delete a file
+     * @param file_path is file location
+     */
     public static void delete_file(String file_path) {
         File myObj = new File(file_path);
         if (myObj.delete()) {

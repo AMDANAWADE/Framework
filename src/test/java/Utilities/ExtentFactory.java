@@ -3,9 +3,6 @@ package Utilities;
 
 import com.aventstack.extentreports.ExtentTest;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class ExtentFactory {
     private ExtentFactory() {
 
@@ -27,14 +24,5 @@ public class ExtentFactory {
         extent.set(extentTestobject);
     }
 
-    public static String getFilename()
-    {
-        SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyy HH-mm-ss");
-        Date date = new Date();
-        String actualDate = format.format(date);
-        String filename = System.getProperty("user.dir") + "/Reports/ExecutionReport_" + actualDate + ".html";
-
-        return filename;
-    }
 }
 

@@ -1,5 +1,6 @@
 package Pages;
 
+import Utilities.BaseClass;
 import Utilities.CommonWebActions;
 import Utilities.ExtentFactory;
 import Utilities.Log;
@@ -27,27 +28,26 @@ public class LoginPage {
         this.driver = driver;
     }
 
-    public void login() throws IOException {
+    public void login()  {
+        BaseClass baseClass = new BaseClass();
         CommonWebActions webActions = new CommonWebActions(driver);
-        ExtentFactory.getInstance().getExtent().log(Status.INFO, "Click Signin Button");
+        baseClass.report_log(true, "Click Signin Button");
         WebElement Account_click;
         Account_click = webActions.getWebElement(Account);
-        ExtentFactory.getInstance().getExtent().pass("Clicking Signin", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
+        baseClass.report_log(true, "Clicked on Sign in");
         webActions.clickButton(Account_click);
         Log.info("Account button is clicked");
-        ExtentFactory.getInstance().getExtent().log(Status.PASS, "Clicked Siginin Button");
+        baseClass.report_log(true, "Clicked Siginin Button");
     }
 
-
     public void enter_email(String email) throws IOException {
+        BaseClass baseClass = new BaseClass();
         CommonWebActions webActions = new CommonWebActions(driver);
         WebElement Email = webActions.getWebElement(Email_Text);
         Log.info("Getting email input element");
-        ExtentFactory.getInstance().getExtent().log(Status.INFO, "Enter Email");
         Log.info("Entering email");
         webActions.sendKeysOnWebElement(Email, email);
-        ExtentFactory.getInstance().getExtent().log(Status.PASS, "Email Entered");
-        ExtentFactory.getInstance().getExtent().pass("Email entered", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
+        baseClass.report_log(true, "Email entered");
         WebElement Continue_click = webActions.getWebElement(Continue);
         Log.info("Clicking on continue");
         webActions.clickButton(Continue_click);
@@ -55,25 +55,25 @@ public class LoginPage {
     }
 
     public void enter_password(String password) throws IOException {
+        BaseClass baseClass = new BaseClass();
         CommonWebActions webActions = new CommonWebActions(driver);
         WebElement enter_password = webActions.getWebElement(Password);
         Log.info("Getting email input element");
-        ExtentFactory.getInstance().getExtent().log(Status.INFO, "Enter password");
         Log.info("Entering password");
         webActions.sendKeysOnWebElement(enter_password, password);
-        ExtentFactory.getInstance().getExtent().log(Status.PASS, "Password Entered");
-        ExtentFactory.getInstance().getExtent().pass("Password entered", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
+        baseClass.report_log(true, "Password Entered");
         WebElement click_signin = webActions.getWebElement(signin);
         Log.info("Clicking Sign in button");
         webActions.clickButton(click_signin);
         Log.info("Sign in Button is clicked");
     }
 
-    public void verify_homepage() {
+    public void verify_homepage(){
+        BaseClass baseClass = new BaseClass();
         String ActualTitle = driver.getTitle();
-        ExtentFactory.getInstance().getExtent().log(Status.INFO, "Getting page title");
+        baseClass.report_log(true, "Getting page title");
         String ExpectedTitle = "Online Shopping site in India: Shop Online for Mobiles, Books, Watches, Shoes and More - Amazon.in";
         Assert.assertEquals(ActualTitle, ExpectedTitle);
-        ExtentFactory.getInstance().getExtent().log(Status.PASS, "Verified Page title");
+        baseClass.report_log(true, "Verified page title");
     }
 }

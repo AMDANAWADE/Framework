@@ -16,7 +16,7 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
 
     public void onTestFailure(ITestResult Result) {
         if(isApiTest) {
-            ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is failed");
+            ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed");
             return;
         }
         CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());

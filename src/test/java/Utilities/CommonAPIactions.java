@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
-public class CommonAPIactions extends BaseClass {
+public class CommonAPIactions {
     private static BufferedReader read_product = null;
     private static PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");;
-    public static final String LIST_USER_API = "/api/users/";
 
     public static RequestSpecification reqSpec;
 
@@ -65,37 +64,37 @@ public class CommonAPIactions extends BaseClass {
      * This method is to create request specification based on given parameters
      * @return returns request specification
      */
-    public static RequestSpecification createRequest(String pathKey, String pathValue, HashMap<String, String> headers, HashMap<String, String> queryParams, String authToken) throws IOException {
+    public static RequestSpecification createRequest(String pathKey, String pathValue, HashMap<String, String> headers, HashMap<String, String> queryParams, String authToken)  {
         if (authToken == null) {
             if (headers == null && queryParams == null && pathKey == null)
-                return requestSpecification().when();
+                return BaseClass.requestSpecification().when();
             else if (headers == null && queryParams == null)
-                return requestSpecification().when().pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().pathParam(pathKey, pathValue);
             else if (queryParams == null)
-                return requestSpecification().when().headers(headers).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().headers(headers).pathParam(pathKey, pathValue);
             else if (headers == null && pathKey == null)
-                return requestSpecification().when().queryParams(queryParams);
+                return BaseClass.requestSpecification().when().queryParams(queryParams);
             else if (pathKey == null)
-                return requestSpecification().when().queryParams(queryParams).headers(headers);
+                return BaseClass.requestSpecification().when().queryParams(queryParams).headers(headers);
             else if (headers == null)
-                return requestSpecification().when().queryParams(queryParams).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().queryParams(queryParams).pathParam(pathKey, pathValue);
             else
-                return requestSpecification().when().headers(headers).queryParams(queryParams).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().headers(headers).queryParams(queryParams).pathParam(pathKey, pathValue);
         } else {
             if (headers == null && queryParams == null && pathKey == null)
-                return requestSpecification().when();
+                return BaseClass.requestSpecification().when();
             else if (headers == null && queryParams == null)
-                return requestSpecification().when().auth().oauth2(authToken).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).pathParam(pathKey, pathValue);
             else if (queryParams == null)
-                return requestSpecification().when().auth().oauth2(authToken).headers(headers).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).headers(headers).pathParam(pathKey, pathValue);
             else if (headers == null && pathKey == null)
-                return requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams);
             else if (pathKey == null)
-                return requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams).headers(headers);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams).headers(headers);
             else if (headers == null)
-                return requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).queryParams(queryParams).pathParam(pathKey, pathValue);
             else
-                return requestSpecification().when().auth().oauth2(authToken).headers(headers).queryParams(queryParams).pathParam(pathKey, pathValue);
+                return BaseClass.requestSpecification().when().auth().oauth2(authToken).headers(headers).queryParams(queryParams).pathParam(pathKey, pathValue);
         }
     }
 
@@ -104,16 +103,17 @@ public class CommonAPIactions extends BaseClass {
      * @return returns authorization token as string
      */
     public static String getAccessTokenForOAuth2(String endpoint, String Username, String Password,String oauthUsername, String oauthPassword, String grantType, String scope, String accessToken){
+        Response response;
         try {
             if(grantType.equalsIgnoreCase("password")){
-                response = requestSpecification().auth().preemptive().basic(Username,Password)
+                response = BaseClass.requestSpecification().auth().preemptive().basic(Username,Password)
                         .formParam("grant_type", grantType)
                         .formParam("username", oauthUsername)
                         .formParam("password", oauthPassword)
                         .when()
                         .post(endpoint);
             }else {
-                response = requestSpecification().auth().preemptive().basic(Username, Password)
+                response = BaseClass.requestSpecification().auth().preemptive().basic(Username, Password)
                         .formParam("grant_type", grantType)
                         .formParam("client_id", oauthUsername)
                         .formParam("client_secret", oauthPassword)

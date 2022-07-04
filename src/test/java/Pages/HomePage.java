@@ -30,33 +30,28 @@ public class HomePage extends BaseClass {
     public void click_orders(String email, String password) throws IOException {
         CommonWebActions webActions = new CommonWebActions(driver);
         report_log(true, "Click on orders");
-        Log.info("Clicking on orders");
         WebElement orders = webActions.getWebElement(OrdersBtn);
         webActions.clickElement(orders);
+        report_log(true, "Signing in");
         WebElement Email = webActions.getWebElement(Input_email);
-        Log.info("Entering email");
         webActions.sendKeysOnWebElement(Email, email);
+        report_log(true, "Entered email");
         driver.findElement(Continue).click();
         WebElement Password = webActions.getWebElement(Input_password);
-        Log.info("Entering password");
+        report_log(true, "Entered Password");
         webActions.sendKeysOnWebElement(Password, password);
-        Log.info("Clicking Signin button");
         driver.findElement(Signin).click();
-        Log.info("Clicked Signin button");
         Assert.assertEquals(driver.findElement(Orders_title).getText(), "Your Orders");
-        Log.info("Verified Order Page Title");
-        report_log(true, "Opened order page");
+        report_log(true, "Opened order page and verified page order title");
     }
 
-    public void click_on_language_options() throws IOException {
+    public void click_on_language_options(){
         CommonWebActions webActions = new CommonWebActions(driver);
         report_log(true, "Click on select languages");
-        Log.info("Click on select languages");
         WebElement lang = webActions.getWebElement(ChangeLang);
         webActions.clickElement(lang);
         Assert.assertEquals(driver.findElement(LanguageSettingsTitle).getText(), "Language Settings");
-        Log.info("Verified Languages Page Title");
-        report_log(true, "Clicked on select languages");
+        report_log(true, "Clicked on select languages and verified page title");
     }
 
 }

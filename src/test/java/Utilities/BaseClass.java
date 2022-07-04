@@ -27,15 +27,25 @@ public class BaseClass {
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     public static RequestSpecification requestSpecification;
     public static Response response = null;
-
+    public static boolean isApiTest = false;
 
     @BeforeMethod
     public void setUp(Method method) throws IOException {
         if (Runner.api_tests.containsValue(method.getName())) {
+            isApiTest = true;
             requestSpecification();
         }
+        else
+            isApiTest = false;
     }
     public void report_log(boolean status, String message) {
+        if(isApiTest) {
+            if (status)
+                ExtentFactory.getInstance().getExtent().pass(message);
+            else
+                ExtentFactory.getInstance().getExtent().fail(message);
+            return;
+        }
         CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
         try {

@@ -14,7 +14,6 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
     public void onTestFailedButWithinSuccessPercentage(ITestResult Result) {
     }
 
-
     public void onTestFailure(ITestResult Result) {
         CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
@@ -36,8 +35,7 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
 
     public void onTestStart(ITestResult Result) {
         test = report.createTest(Result.getMethod().getMethodName());
-        ExtentFactory.getInstance().setExtent(test);
-
+        ExtentFactory.setExtent(test);
     }
 
     public void onTestSuccess(ITestResult Result) {
@@ -58,9 +56,9 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
         report.flush();
     }
 
-    public void onStart(ISuite iSuite) {
+    public void onStart(ISuite iSuite)
+    {
         report = ExtentSetup.setupExtentReport();
     }
-
 }
 

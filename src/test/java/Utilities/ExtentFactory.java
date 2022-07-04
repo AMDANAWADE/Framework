@@ -14,13 +14,13 @@ public class ExtentFactory {
         return instance;
     }
 
-    ThreadLocal<ExtentTest> extent = new ThreadLocal<ExtentTest>();
+    private static ThreadLocal<ExtentTest> extent = new ThreadLocal<ExtentTest>();
 
     public ExtentTest getExtent() {
         return extent.get();
     }
 
-    public void setExtent(ExtentTest extentTestobject) {
+    public static void setExtent(ExtentTest extentTestobject) {
         extent.set(extentTestobject);
     }
 

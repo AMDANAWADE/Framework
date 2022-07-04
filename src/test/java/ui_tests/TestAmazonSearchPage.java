@@ -12,7 +12,7 @@ public class TestAmazonSearchPage extends BaseClass {
 
     //This method is to search a product
     @Test(dataProvider = "input_data")
-    public void search_operation(Map<String, String> input_data) throws IOException {
+    public void search_operation(Map<String, String> input_data) throws InterruptedException {
         openBrowser(input_data.get("BROWSER"));
         AmazonSearchPage page = new AmazonSearchPage(DriverFactory.getDriver());
         page.search_product(input_data.get("PRODUCT"));

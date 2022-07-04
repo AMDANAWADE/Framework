@@ -26,20 +26,16 @@ public class BaseClass {
     String runnerFile = prop.getProperty("RUNNER_FILE_PATH");
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     public static RequestSpecification requestSpecification;
-    public static Response response = null;
-    public static boolean isApiTest = false;
-
+    boolean isApiTest = false;
     @BeforeMethod
-    public void setUp(Method method) throws IOException {
+    public void setUp(Method method) {
         if (Runner.api_tests.containsValue(method.getName())) {
             isApiTest = true;
             requestSpecification();
         }
-        else
-            isApiTest = false;
     }
     public void report_log(boolean status, String message) {
-        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
+        Log.info(message);
         if(isApiTest) {
             if (status)
                 ExtentFactory.getInstance().getExtent().pass(message);
@@ -47,6 +43,7 @@ public class BaseClass {
                 ExtentFactory.getInstance().getExtent().fail(message);
             return;
         }
+        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
         try {
             if (status) {
@@ -64,7 +61,7 @@ public class BaseClass {
             Log.info("Unable to add test step");
         }
     }
-    public static RequestSpecification requestSpecification() throws IOException {
+    public static RequestSpecification requestSpecification()  {
         PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
         String BaseUrl = prop.getProperty("baseUrl");
         if (requestSpecification == null) {

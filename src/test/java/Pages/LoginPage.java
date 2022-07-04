@@ -24,37 +24,29 @@ public class LoginPage extends BaseClass {
 
     public void login() {
         CommonWebActions webActions = new CommonWebActions(driver);
-        report_log(true, "Click Signin Button");
+        report_log(true, "Click on Signin Button");
         WebElement Account_click;
         Account_click = webActions.getWebElement(Account);
-        report_log(true, "Clicked on Sign in");
         webActions.clickButton(Account_click);
-        Log.info("Account button is clicked");
-        report_log(true, "Clicked Siginin Button");
+        report_log(true, "Clicked on Sign in");
     }
 
     public void enter_email(String email) {
         CommonWebActions webActions = new CommonWebActions(driver);
         WebElement Email = webActions.getWebElement(Email_Text);
-        Log.info("Getting email input element");
-        Log.info("Entering email");
         webActions.sendKeysOnWebElement(Email, email);
         report_log(true, "Email entered");
         WebElement Continue_click = webActions.getWebElement(Continue);
-        Log.info("Clicking on continue");
         webActions.clickButton(Continue_click);
-        Log.info("Clicked on continue");
+        report_log(true,"Clicked on continue");
     }
 
     public void enter_password(String password) {
         CommonWebActions webActions = new CommonWebActions(driver);
         WebElement enter_password = webActions.getWebElement(Password);
-        Log.info("Getting email input element");
-        Log.info("Entering password");
         webActions.sendKeysOnWebElement(enter_password, password);
         report_log(true, "Password Entered");
         WebElement click_signin = webActions.getWebElement(signin);
-        Log.info("Clicking Sign in button");
         webActions.clickButton(click_signin);
         Log.info("Sign in Button is clicked");
     }

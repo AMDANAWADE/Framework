@@ -11,8 +11,9 @@ public class Log { //Initialize Log4j instance
     private static final Logger Log = LogManager.getLogger(Log.class);
 
     static {
-        String filename = "C:\\My Learning\\Framework\\logs\\automation_log_"+System.currentTimeMillis()+".log";
+        String filename = "C:\\My Learning\\Framework\\logs\\automation_log_" + System.currentTimeMillis() + ".log";
         initializeYourLogger(filename, "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %c{1} - %msg%n");
+
     }
 
     public static void info(String message) {
@@ -43,27 +44,22 @@ public class Log { //Initialize Log4j instance
     public static void initializeYourLogger(String fileName, String pattern) {
 
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
-
         builder.setStatusLevel(Level.INFO);
-        builder.setConfigurationName("DefaultLogger");
+        builder.setConfigurationName("DefaultFileLogger");
 
-        // create a rolling file appender
+// set the pattern layout and pattern
         LayoutComponentBuilder layoutBuilder = builder.newLayout("PatternLayout")
                 .addAttribute("pattern", pattern);
-        ComponentBuilder triggeringPolicy = builder.newComponent("Policies")
-                .addComponent(builder.newComponent("SizeBasedTriggeringPolicy").addAttribute("size", "1KB"));
 
-        AppenderComponentBuilder appenderBuilder= builder.newAppender("LogToRollingFile", "RollingFile")
+// create a file appender
+        AppenderComponentBuilder appenderBuilder = builder.newAppender("LogToFile", "File")
                 .addAttribute("fileName", fileName)
-                .addAttribute("filePattern", fileName + "-%d{MM-dd-yy-HH-mm-ss}.log")
-                .add(layoutBuilder)
-                .addComponent(triggeringPolicy);
-        appenderBuilder.add(builder.newLayout("PatternLayout")
-                .addAttribute("pattern", pattern));
-        RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
-        builder.add(appenderBuilder);
+                .add(layoutBuilder);
 
-        rootLogger.add(builder.newAppenderRef("LogToRollingFile"));
+        builder.add(appenderBuilder);
+        RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
+
+        rootLogger.add(builder.newAppenderRef("LogToFile"));
         builder.add(rootLogger);
         Configurator.reconfigure(builder.build());
     }

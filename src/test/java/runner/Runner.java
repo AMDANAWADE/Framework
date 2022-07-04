@@ -54,7 +54,6 @@ public class Runner {
                 XmlClass tc_class = null;
                 if (testcase.get("TC_TYPE").equalsIgnoreCase("Web")) {
                     tc_class = new XmlClass(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
-
                     classNames.add(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
                 } else if (testcase.get("TC_TYPE").equalsIgnoreCase("API")) {
                     tc_class = new XmlClass(prop.getProperty("API_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));

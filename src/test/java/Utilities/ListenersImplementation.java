@@ -6,7 +6,7 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import org.testng.*;
 
 
-public class ListenersImplementation implements ITestListener, ISuiteListener {
+public class ListenersImplementation extends BaseClass implements ITestListener, ISuiteListener {
     static ExtentReports report;
     ExtentTest test;
     PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
@@ -15,6 +15,10 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
     }
 
     public void onTestFailure(ITestResult Result) {
+        if(isApiTest) {
+            ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is failed");
+            return;
+        }
         CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
         try {
@@ -39,6 +43,10 @@ public class ListenersImplementation implements ITestListener, ISuiteListener {
     }
 
     public void onTestSuccess(ITestResult Result) {
+        if(isApiTest) {
+                ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed");
+            return;
+        }
         CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
         try {

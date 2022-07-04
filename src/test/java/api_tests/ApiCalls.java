@@ -49,7 +49,6 @@ public class ApiCalls extends BaseClass {
             JsonHandler.jsonSchemaValidation(response, prop.getProperty("GET_SINGLE_USER_SCHEMA"));
             Log.info("Get Call Executed " + response.asString());
             report_log(true, "Get Single User Call executed");
-            System.out.println("Get call completed---------------");
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
@@ -66,7 +65,6 @@ public class ApiCalls extends BaseClass {
             CommonAPIactions.validateStatusCode(response, 200);
             Log.info("Get Call Executed " + response.asString());
             report_log(true, "Get List User Call executed");
-            System.out.println("Get call completed---------------");
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
@@ -83,7 +81,6 @@ public class ApiCalls extends BaseClass {
             validatePostSingleUserResponse(response, input_data.get("NAME"), input_data.get("JOB"));
             Log.info("Post Call Executed " + response.asString());
             report_log(true, "Post Call executed");
-            System.out.println("Post call completed---------------");
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
@@ -100,7 +97,6 @@ public class ApiCalls extends BaseClass {
             validatePutUpdateUserResponse(response, input_data.get("NAME"), input_data.get("JOB"));
             Log.info("Put Call Executed " + response.asString());
             report_log(true, "Put call executed");
-            System.out.println("Put call completed---------------");
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
@@ -114,7 +110,6 @@ public class ApiCalls extends BaseClass {
             response = CommonAPIactions.deleteCall(input_data.get("ENDPOINT"), input_data.get("PATH_KEY"), input_data.get("PATH_VALUE"), null, null, null);
             CommonAPIactions.validateStatusCode(response, 204);
             Log.info("Delete Call Executed ");
-            System.out.println("Delete call completed---------------");
             report_log(true, "Delete Call executed");
         } catch (Exception e) {
             Log.fatal(e.getMessage());

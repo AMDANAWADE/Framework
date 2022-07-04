@@ -39,6 +39,7 @@ public class BaseClass {
             isApiTest = false;
     }
     public void report_log(boolean status, String message) {
+        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         if(isApiTest) {
             if (status)
                 ExtentFactory.getInstance().getExtent().pass(message);
@@ -46,7 +47,6 @@ public class BaseClass {
                 ExtentFactory.getInstance().getExtent().fail(message);
             return;
         }
-        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
         String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
         try {
             if (status) {

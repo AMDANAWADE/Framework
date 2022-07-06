@@ -7,11 +7,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-
 public class CommonWebActions {
 
     private WebDriver driver;
-
+    BaseClass baseClass = new BaseClass();
     public CommonWebActions(WebDriver driver) {
         this.driver = driver;
     }
@@ -22,20 +21,28 @@ public class CommonWebActions {
      * @param element is web element
      */
     public void clickButton(WebElement element) {
-        WebDriverWait webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
-        WebElement elements = null;
-        elements = webDriverWait.until(ExpectedConditions.elementToBeClickable(element));
-        ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", elements);
+        try {
+            WebDriverWait webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+            WebElement elements = null;
+            elements = webDriverWait.until(ExpectedConditions.elementToBeClickable(element));
+            ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", elements);
+            baseClass.report_log(true, "Cliked on button " + element);
+        } catch (Exception e) {
+            baseClass.report_log(false, "Cannot click the button " + element);
+        }
     }
-
     /***
      * This method is to click a web element
      * @param element is web element
      */
     public void clickElement(WebElement element) {
-        ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", element);
+        try {
+            ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", element);
+            baseClass.report_log(true, "Clicked on web element " + element);
+        } catch (Exception e) {
+            baseClass.report_log(true, "Cannot click the element " +e.getMessage());
+        }
     }
-
     /***
      * This method is to click a web element using javascript executor
      * @param guide is xpath locator
@@ -51,7 +58,15 @@ public class CommonWebActions {
      * @return web element
      */
     public WebElement getWebElement(By locator) {
-        return this.driver.findElement(locator);
+        WebElement element = null;
+        try {
+            element = this.driver.findElement(locator);
+            baseClass.report_log(true, "Getting web element " + locator);
+
+        } catch (Exception e) {
+            baseClass.report_log(false, "Could not get element " +e.getMessage());
+        }
+        return element;
     }
 
     /***
@@ -60,11 +75,15 @@ public class CommonWebActions {
      * @param text is input string
      */
     public void sendKeysOnWebElement(WebElement element, String text) {
-        element.click();
-        element.clear();
-        element.sendKeys(text);
+        try {
+            element.click();
+            element.clear();
+            element.sendKeys(text);
+            baseClass.report_log(true, "Entering input data " + text);
+        } catch (Exception e) {
+            baseClass.report_log(false, "Cannot enter input data " + e.getMessage());
+        }
     }
-
     /***
      * This method is to select a web element from dropdown
      * @param element is web element
@@ -80,8 +99,15 @@ public class CommonWebActions {
      * @param element is web element
      */
     public void MouseOver(WebElement element) {
-        Actions actObj = new Actions(this.driver);
-        actObj.moveToElement(element).build().perform();
+        try {
+            Actions actObj = new Actions(this.driver);
+            actObj.moveToElement(element).build().perform();
+            baseClass.report_log(true, "Mouse hover on the element " + element);
+        }
+        catch (Exception e)
+        {
+            baseClass.report_log(false,"Cannot hover on the element "+e.getMessage());
+        }
     }
 
     /***
@@ -175,14 +201,14 @@ public class CommonWebActions {
      * This method is to scroll up the window
      */
     public void scrollUp() {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollTo(document.body.scrollHeight, 0)");
+        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(document.body.scrollHeight, 0)");
     }
 
     /***
      * This method is to scroll down the window
      */
     public void scrollDown() {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollTo(0, document.body.scrollHeight");
+        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(0,document.body.scrollHeight)");
     }
 
     /***
@@ -207,7 +233,7 @@ public class CommonWebActions {
      * @param y is the value to scroll vertically
      */
     public void scrollBy(int x, int y) {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)", "");
+        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)");
     }
 
     /***

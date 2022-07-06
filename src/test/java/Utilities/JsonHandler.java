@@ -45,6 +45,7 @@ public class JsonHandler {
      * @param title is json field title
      * @return returns json value as string
      */
+
     public static String getJsonValue(Response response, String title) {
         try {
             return response.path(title).toString();
@@ -65,5 +66,20 @@ public class JsonHandler {
         } catch (Exception e) {
             Log.fatal(e.getMessage());
         }
+    }
+
+    /***
+     * This method is to get json value
+     * @param jsonString is json response string
+     * @param jsonPath is json path of the value to be fetched
+     * @return returns the value fetched from json path
+     */
+    public static String getJsonValue(String jsonString, String jsonPath) {
+        try {
+            return JsonPath.read(jsonString, jsonPath).toString();
+        } catch (Exception e) {
+            Log.info("Unable to get value from JSON with path: "+jsonPath);
+        }
+        return null;
     }
 }

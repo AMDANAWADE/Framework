@@ -15,7 +15,6 @@ import org.testng.ITestNGMethod;
 import org.testng.annotations.*;
 import runner.Runner;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Map;
 

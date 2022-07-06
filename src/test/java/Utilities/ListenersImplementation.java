@@ -15,23 +15,8 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
     }
 
     public void onTestFailure(ITestResult Result) {
-        if(isApiTest) {
-            ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed");
-            return;
-        }
-        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
-        String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
-        try {
-            if (step_screenshot_flag.equalsIgnoreCase("yes"))
-                ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
-            else
-                ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed");
-        } catch (Exception e) {
-            Log.info("Unable to add test step");
-        }
-
+        ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed");
     }
-
 
     public void onTestSkipped(ITestResult Result) {
     }
@@ -43,20 +28,7 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
     }
 
     public void onTestSuccess(ITestResult Result) {
-        if(isApiTest) {
-                ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed");
-            return;
-        }
-        CommonWebActions webActions = new CommonWebActions(DriverFactory.getDriver());
-        String step_screenshot_flag = prop.getProperty("STEP_SCREENSHOT");
-        try {
-            if (step_screenshot_flag.equalsIgnoreCase("yes"))
-                ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed", MediaEntityBuilder.createScreenCaptureFromBase64String(webActions.getScreenShotAsBase64()).build());
-            else
-                ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed");
-        } catch (Exception e) {
-            Log.info("Unable to add test step");
-        }
+        ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed");
     }
 
 

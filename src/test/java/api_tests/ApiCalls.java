@@ -87,7 +87,7 @@ public class ApiCalls extends BaseClass {
     public void putUpdateUserCall(Map<String, String> input_data) {
         // String authToken = getAccessTokenForOAuth2(endpoint, username, password, oauthUsername, oauthPassword, grantType, scope, expectedTokenName);
         try {
-            report_log(true,"Started executing put call for updating a user");
+           report_log(true,"Started executing put call for updating a user");
             Response response = CommonAPIactions.putCall(input_data.get("ENDPOINT"), putUpdateUserPayload(prop.getProperty("POSTJSONDATA"), input_data.get("NAME"), input_data.get("JOB")), input_data.get("PATH_KEY"), input_data.get("PATH_VALUE"), null, null, null);
             CommonAPIactions.validateStatusCode(response, 200);
             JsonHandler.jsonSchemaValidation(response, prop.getProperty("PUT_UPDATE_USER_SCHEMA"));

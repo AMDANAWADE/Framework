@@ -2,14 +2,12 @@ package Utilities;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.MediaEntityBuilder;
 import org.testng.*;
 
 
 public class ListenersImplementation extends BaseClass implements ITestListener, ISuiteListener {
     static ExtentReports report;
     ExtentTest test;
-    PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
 
     public void onTestFailedButWithinSuccessPercentage(ITestResult Result) {
     }
@@ -23,7 +21,7 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
 
 
     public void onTestStart(ITestResult Result) {
-        test = report.createTest(Result.getMethod().getMethodName());
+        test = report.createTest(Result.getMethod().getDescription());
         ExtentFactory.setExtent(test);
     }
 
@@ -36,9 +34,9 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
         report.flush();
     }
 
-    public void onStart(ISuite iSuite)
-    {
+    public void onStart(ISuite iSuite) {
         report = ExtentSetup.setupExtentReport();
+
     }
 }
 

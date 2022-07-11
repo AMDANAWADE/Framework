@@ -93,8 +93,6 @@ public class XMLHandler {
      * @param delimiter delimiter value
      * @param Filepath xml file location
      * @return returns the data in xml format
-     * @throws ParserConfigurationException
-     * @throws TransformerException
      */
     public static String transformToXML(Map<String, String> pathValueMap, String delimiter, String Filepath)
             throws ParserConfigurationException, TransformerException {

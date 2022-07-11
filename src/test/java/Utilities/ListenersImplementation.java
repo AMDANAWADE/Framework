@@ -14,6 +14,8 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
 
     public void onTestFailure(ITestResult Result) {
         ExtentFactory.getInstance().getExtent().fail("Test Case " + Result.getMethod().getMethodName() + " is failed");
+        ITestContext context = Result.getTestContext();
+        ExtentFactory.getInstance().getExtent().assignCategory(context.getCurrentXmlTest().getName());
     }
 
     public void onTestSkipped(ITestResult Result) {
@@ -27,6 +29,8 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
 
     public void onTestSuccess(ITestResult Result) {
         ExtentFactory.getInstance().getExtent().pass("Test Case " + Result.getMethod().getMethodName() + " is passed");
+        ITestContext context = Result.getTestContext();
+        ExtentFactory.getInstance().getExtent().assignCategory(context.getCurrentXmlTest().getName());
     }
 
 
@@ -37,6 +41,10 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
     public void onStart(ISuite iSuite) {
         report = ExtentSetup.setupExtentReport();
 
+    }
+    public void onStart(ITestNGMethod iTestNGMethod)
+    {
+        iTestNGMethod.getXmlTest().getName();
     }
 }
 

@@ -147,6 +147,14 @@ public class ExcelHandling implements IDataHandler {
         return rw == null;
     }
 
+    public int getHeaderRow()
+    {
+        return headerRow;
+    }
+    public void setHeaderRow(int row_num)
+    {
+        headerRow = row_num;
+    }
     /***
      * This method is to get row indexes having value in column
      * @param col_num is column number
@@ -155,9 +163,10 @@ public class ExcelHandling implements IDataHandler {
      */
     public List<Integer> get_row_indexes_having_value_in_column(int start_row, int col_num, String value) {
         List<Integer> row_indexes = new ArrayList<>();
-        for (int row_num = start_row; row_num < getTotalRowCount(); row_num++) {
-            if (isEmptyRow(row_num))
-                return Collections.emptyList();
+        for (int row_num = start_row; row_num <= getTotalRowCount(); row_num++) {
+            if (isEmptyRow(row_num)) {
+                continue;
+            }
             if (get_cell_value(row_num, col_num).equalsIgnoreCase(value)) {
                 row_indexes.add(row_num);
             }

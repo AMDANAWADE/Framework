@@ -26,8 +26,9 @@ public class CommonWebActions {
             WebElement elements = null;
             elements = webDriverWait.until(ExpectedConditions.elementToBeClickable(element));
             ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", elements);
-            baseClass.report_log(true, "Cliked on button " + element);
+            baseClass.report_log(true, "Clicked on button " + element);
         } catch (Exception e) {
+            Log.info(e.getMessage());
             baseClass.report_log(false, "Cannot click the button " + element);
         }
     }
@@ -40,18 +41,39 @@ public class CommonWebActions {
             ((JavascriptExecutor) this.driver).executeScript("arguments[0].click();", element);
             baseClass.report_log(true, "Clicked on web element " + element);
         } catch (Exception e) {
-            baseClass.report_log(true, "Cannot click the element " +e.getMessage());
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot click the element "+ element);
         }
     }
     /***
      * This method is to click a web element using javascript executor
      * @param guide is xpath locator
      */
-    public void javascriptExecutor(By guide) {
-        JavascriptExecutor executor = (JavascriptExecutor) this.driver;
-        executor.executeScript("arguments[0].click();", this.driver.findElement(guide));
+    public void clickElement(By guide) {
+        try {
+            JavascriptExecutor executor = (JavascriptExecutor) this.driver;
+            executor.executeScript("arguments[0].click();", this.driver.findElement(guide));
+            baseClass.report_log(true,"Clicked on web element "+guide);
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot click the element "+guide);
+        }
     }
 
+    public String getText(By by)
+    {
+        String text ="";
+        try{
+            text = driver.findElement(by).getText();
+            baseClass.report_log(true,"Getting text of the web element "+by);
+        }
+        catch (Exception e)
+        {
+            baseClass.report_log(true,"Cannot get the text from web element");
+            Log.info(e.getMessage());
+        }
+        return text;
+    }
     /***
      * This method returns web element when xpath is given as parameter
      * @param locator is xpath locator
@@ -64,7 +86,8 @@ public class CommonWebActions {
             baseClass.report_log(true, "Getting web element " + locator);
 
         } catch (Exception e) {
-            baseClass.report_log(false, "Could not get element " +e.getMessage());
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Could not get element " +locator);
         }
         return element;
     }
@@ -81,7 +104,8 @@ public class CommonWebActions {
             element.sendKeys(text);
             baseClass.report_log(true, "Entering input data " + text);
         } catch (Exception e) {
-            baseClass.report_log(false, "Cannot enter input data " + e.getMessage());
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot enter input data " + text);
         }
     }
     /***
@@ -90,10 +114,15 @@ public class CommonWebActions {
      * @param text is visible text
      */
     public void selectByVisibleText(WebElement element, String text) {
-        Select select = new Select(element);
-        select.selectByVisibleText(text);
+        try {
+            Select select = new Select(element);
+            select.selectByVisibleText(text);
+            baseClass.report_log(true, "Selected element by visible text " + element + text);
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot select element on visible text");
+        }
     }
-
     /***
      * This method is to perform mouse hover action on the web element
      * @param element is web element
@@ -106,7 +135,8 @@ public class CommonWebActions {
         }
         catch (Exception e)
         {
-            baseClass.report_log(false,"Cannot hover on the element "+e.getMessage());
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot hover on the element "+element);
         }
     }
 
@@ -116,10 +146,15 @@ public class CommonWebActions {
      * @param indexValue is index value
      */
     public void selectByIndex(WebElement element, int indexValue) {
-        Select selObj = new Select(element);
-        selObj.selectByIndex(indexValue);
+        try {
+            Select selObj = new Select(element);
+            selObj.selectByIndex(indexValue);
+            baseClass.report_log(true, "Selected value by index");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot select element by index " + element + indexValue);
+        }
     }
-
 
     /***
      * This method is to accept alert
@@ -130,14 +165,19 @@ public class CommonWebActions {
 
     /***
      * This method is to select an option from dropdown by passing value
-     * @param element is webelement
+     * @param element is web element
      * @param Value the value of the web element to be selected
      */
     public void selectByValue(WebElement element, String Value) {
-        Select selectObject = new Select(element);
-        selectObject.selectByValue(Value);
+        try {
+            Select selectObject = new Select(element);
+            selectObject.selectByValue(Value);
+            baseClass.report_log(true,"Selected an option based on value");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot select an option based on value");
+        }
     }
-
     /***
      * This method is to get window ID
      * @return returns the window ID
@@ -153,9 +193,14 @@ public class CommonWebActions {
      */
     public boolean isElementPresent(By by) {
         try {
+            WebDriverWait webDriverWait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+            webDriverWait.until(ExpectedConditions.presenceOfElementLocated(by));
             this.driver.findElement(by);
+            baseClass.report_log(true,"Element is present "+by);
             return true;
         } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot find the element "+by);
             return false;
         }
     }
@@ -164,7 +209,16 @@ public class CommonWebActions {
      * This method is to maximize the current window
      */
     public void maximizePage() {
-        this.driver.manage().window().maximize();
+        try {
+            this.driver.manage().window().maximize();
+            baseClass.report_log(true,"Maximizing the page");
+        }
+        catch (Exception e)
+        {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot maximize the page");
+        }
+
     }
 
     /***
@@ -172,43 +226,77 @@ public class CommonWebActions {
      */
     //To delete all cookies
     public void deleteAllCookies() {
-        this.driver.manage().deleteAllCookies();
+        try {
+            this.driver.manage().deleteAllCookies();
+            baseClass.report_log(true, "Deleted all cookies");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot delete all cookies");
+        }
     }
-
     /***
      * This method is to refresh a page
      */
     public void refreshPage() {
-        this.driver.navigate().refresh();
+        try {
+            this.driver.navigate().refresh();
+            baseClass.report_log(true,"Refreshing the page");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot refresh the page");
+        }
     }
 
     /***
      * This method is to navigate back
      */
     public void navigateBack() {
-        this.driver.navigate().back();
+        try {
+            this.driver.navigate().back();
+            baseClass.report_log(true, "Navigating back");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Cannot navigate back");
+        }
     }
-
     /***
      * This method is to wait for specified amount of time
      * @param seconds is the duration
      */
     public void implicitWait(int seconds) {
-        this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
+        try {
+            this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(seconds));
+            baseClass.report_log(true, "Waiting for duration of " + seconds + " seconds");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Waiting interrupted");
+        }
     }
 
     /***
      * This method is to scroll up the window
      */
     public void scrollUp() {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(document.body.scrollHeight, 0)");
+        try {
+            ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(document.body.scrollHeight, 0)");
+            baseClass.report_log(true,"Scroll up the window action is performed");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot perform scroll up action");
+        }
     }
 
     /***
      * This method is to scroll down the window
      */
     public void scrollDown() {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(0,document.body.scrollHeight)");
+        try {
+            ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(0,document.body.scrollHeight)");
+            baseClass.report_log(true,"Scroll down the window action is performed");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot perform scroll down action");
+        }
     }
 
     /***
@@ -216,26 +304,42 @@ public class CommonWebActions {
      * @param element is web element
      */
     public void scrollIntoView(WebElement element) {
-        ((JavascriptExecutor) this.driver).executeScript("arguments[0].scrollIntoView();", element);
-    }
+        try {
+            ((JavascriptExecutor) this.driver).executeScript("arguments[0].scrollIntoView();", element);
+            baseClass.report_log(true,"Scrolled into the view "+element);
 
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot perform scroll into view action for element "+element);
+
+        }
+    }
     /***
      * This method is to wait for given time
      * @param timeInSeconds time in seconds
      */
     public void wait(int timeInSeconds) throws InterruptedException {
-        Thread.sleep(timeInSeconds);
+        try {
+            Thread.sleep(timeInSeconds);
+            baseClass.report_log(true,"Waited for "+timeInSeconds+" seconds");
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false,"Cannot perform wait action");
+        }
     }
-
     /***
      * This is to scroll window to the given dimensions
      * @param x is the value to scroll horizontally
      * @param y is the value to scroll vertically
      */
     public void scrollBy(int x, int y) {
-        ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)");
+        try {
+            ((JavascriptExecutor) this.driver).executeScript("window.scrollBy(x,y)");
+            baseClass.report_log(true,"Scrolling by pixel value "+x+y);
+        } catch (Exception e) {
+            baseClass.report_log(true, "Cannot scroll the window by the given pixel value");
+        }
     }
-
     /***
      * This method is to take screenshot as base64 string
      * @return returns the screenshot as string

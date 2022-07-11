@@ -2,6 +2,7 @@ package Pages;
 
 import Utilities.BaseClass;
 import Utilities.CommonWebActions;
+import org.checkerframework.checker.units.qual.C;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -18,7 +19,7 @@ public class HomePage extends BaseClass {
     public WebDriver driver;
 
     By Orders_title = By.xpath("//h1[text()='Your Orders']");
-    By OrdersBtn = By.xpath("(//span[@class='nav-line-2'])[2]");
+    By OrdersBtn = By.xpath("//span[contains(text(),'Returns')]");
     By ChangeLang = By.xpath("//span[@class='icp-nav-flag icp-nav-flag-in']");
     By LanguageSettingsTitle = By.xpath("//h3[contains(text(),\"Language Settings\")]");
     By HelpLink = By.xpath("//a[text()='Help']");
@@ -33,7 +34,9 @@ public class HomePage extends BaseClass {
     By YourAddresses = By.xpath("(//h2[@class='a-spacing-none ya-card__heading--rich a-text-normal'])[4]");
     By AddAddress = By.xpath("//div[@class='a-box-inner a-padding-extra-large']");
     By AccountMouseHover = By.xpath("//span[@class='nav-line-2 ']");
-
+    By Menu = By.xpath("(//span[text()='All'])[2]");
+    By NewReleases = By.xpath("(//a[text()='New Releases'])[2]");
+    By NewReleasesPageTitle = By.xpath("//span[text()='Amazon Hot New Releases']");
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
@@ -76,8 +79,6 @@ public class HomePage extends BaseClass {
         }
         WebElement customerservice = webActions.getWebElement(CustomerServiceMouseHover);
         webActions.MouseOver(customerservice);
-//        Actions act = new Actions(driver);
-//        act.moveToElement(customerservice).perform();
         WebElement contactUs = webActions.getWebElement(ContactUsBtn);
         contactUs.click();
         report_log(true, "Clicked on contact us button");
@@ -123,5 +124,15 @@ public class HomePage extends BaseClass {
         boolean value = driver.findElement(add_new_address_title).getText().contains("new address");
         Assert.assertEquals(value, true);
         report_log(true, "Verified title to add new address");
+    }
+    public void shop_new_releases() throws InterruptedException {
+        CommonWebActions webActions = new CommonWebActions(driver);
+        WebElement all= driver.findElement(Menu);
+        all.click();
+        driver.findElement(NewReleases).click();
+        webActions.wait(1000);
+        String title = webActions.getText(NewReleasesPageTitle);
+        Assert.assertEquals(title,"Amazon Hot New Releases");
+        report_log(true, "Verified new releases page title");
     }
 }

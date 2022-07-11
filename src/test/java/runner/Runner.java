@@ -2,6 +2,7 @@ package runner;
 
 import Utilities.ExcelHandling;
 import Utilities.ListenersImplementation;
+import Utilities.Log;
 import Utilities.PropertiesFileHandler;
 import org.testng.ITestNGListener;
 import org.testng.TestNG;
@@ -32,7 +33,6 @@ public class Runner {
                 System.out.println("No Tests to run!");
                 System.exit(0);
             }
-
         } else {
             System.out.println("Could not identify the runner file.");
             System.exit(0);
@@ -86,7 +86,7 @@ public class Runner {
             tng.setXmlSuites(suites);
             tng.run();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Log.info(e.getMessage());
         }
     }
 }

@@ -17,7 +17,7 @@ public class AmazonSearchPage extends BaseClass {
     public AmazonSearchPage(WebDriver driver) {
         this.driver = driver;
     }
-   
+
     By searchBox = By.xpath("//*[@id=\"twotabsearchtextbox\"]");
     By search_btn = By.xpath("//*[@id=\"nav-search-submit-button\"]");
     By amazonProductLink = By.xpath("//*[@id=\"search\"]/div[1]/div[1]/div/span[3]/div[2]/div[3]/div/div/div/div/div/div/div/div[2]/div/div/div[1]/h2/a/span");
@@ -28,8 +28,8 @@ public class AmazonSearchPage extends BaseClass {
     public void search_product(String searchinput) throws InterruptedException {
         CommonWebActions webActions = new CommonWebActions(driver);
         WebElement search_box = webActions.getWebElement(searchBox);
-        webActions.sendKeysOnWebElement(search_box,searchinput);
-        report_log(true,"Entered search product name");
+        webActions.sendKeysOnWebElement(search_box, searchinput);
+        report_log(true, "Entered search product name");
         webActions.wait(2000);
         WebElement search_button = webActions.getWebElement(search_btn);
         webActions.clickElement(search_button);

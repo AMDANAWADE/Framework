@@ -9,9 +9,9 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 public class Log { //Initialize Log4j instance
     private static final Logger Log = LogManager.getLogger(Log.class);
-
+    static PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
     static {
-        String filename = "C:\\My Learning\\Framework\\logs\\automation_log_" + System.currentTimeMillis() + ".log";
+        String filename = prop.getProperty("LOG_FILE_NAME") + System.currentTimeMillis() + ".log";
         initializeYourLogger(filename, "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %c{1} - %msg%n");
 
     }
@@ -46,19 +46,14 @@ public class Log { //Initialize Log4j instance
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
         builder.setStatusLevel(Level.INFO);
         builder.setConfigurationName("DefaultFileLogger");
-
-// set the pattern layout and pattern
         LayoutComponentBuilder layoutBuilder = builder.newLayout("PatternLayout")
                 .addAttribute("pattern", pattern);
-
-// create a file appender
         AppenderComponentBuilder appenderBuilder = builder.newAppender("LogToFile", "File")
                 .addAttribute("fileName", fileName)
                 .add(layoutBuilder);
 
         builder.add(appenderBuilder);
         RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
-
         rootLogger.add(builder.newAppenderRef("LogToFile"));
         builder.add(rootLogger);
         Configurator.reconfigure(builder.build());

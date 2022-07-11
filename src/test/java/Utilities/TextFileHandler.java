@@ -28,7 +28,7 @@ public class TextFileHandler {
             br.close();
             return readData;
         } catch (Exception e) {
-
+            Log.info(e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -44,7 +44,7 @@ public class TextFileHandler {
         try {
             data = new String(Files.readAllBytes(Paths.get(filepath)));
         } catch (Exception e) {
-
+            Log.info(e.getMessage());
             e.printStackTrace();
         }
         return data;
@@ -59,8 +59,6 @@ public class TextFileHandler {
         String data = "";
         File f = new File(filepath);
         try {
-
-
             BufferedReader br = new BufferedReader(new FileReader(f));
             String line;
             while ((line = br.readLine()) != null) {
@@ -68,7 +66,7 @@ public class TextFileHandler {
             }
             br.close();
         } catch (Exception e) {
-
+            Log.info(e.getMessage());
             e.printStackTrace();
         }
         return data;
@@ -90,7 +88,7 @@ public class TextFileHandler {
             bw.close();
             writer.close();
         } catch (Exception e) {
-
+            Log.info(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -107,7 +105,7 @@ public class TextFileHandler {
             newFile = f.createNewFile();
             Log.info("File Created: " + newFile);
         } catch (Exception e) {
-
+            Log.info(e.getMessage());
             e.printStackTrace();
         }
         return newFile;

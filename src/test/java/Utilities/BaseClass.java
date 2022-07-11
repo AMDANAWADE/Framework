@@ -1,21 +1,19 @@
 package Utilities;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
-import com.aventstack.extentreports.Status;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.apache.logging.log4j.ThreadContext;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestNGMethod;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import runner.Runner;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 
@@ -26,6 +24,7 @@ public class BaseClass {
     ExcelHandling excelHandlingRunner = new ExcelHandling(runnerFile, 0);
     public static RequestSpecification requestSpecification;
     boolean isApiTest = false;
+
     @BeforeMethod
     public void setUp(Method method) {
         if (Runner.api_tests.containsValue(method.getName())) {
@@ -33,9 +32,10 @@ public class BaseClass {
             requestSpecification();
         }
     }
+
     public void report_log(boolean status, String message) {
         Log.info(message);
-        if(isApiTest) {
+        if (isApiTest) {
             if (status)
                 ExtentFactory.getInstance().getExtent().pass(message);
             else
@@ -60,7 +60,8 @@ public class BaseClass {
             Log.info("Unable to add test step");
         }
     }
-    public static RequestSpecification requestSpecification()  {
+
+    public static RequestSpecification requestSpecification() {
         PropertiesFileHandler prop = new PropertiesFileHandler("config.properties");
         String BaseUrl = prop.getProperty("baseUrl");
         if (requestSpecification == null) {
@@ -73,6 +74,8 @@ public class BaseClass {
     }
 
     public void openBrowser(String browserName) {
+        browserName = (browserName.equalsIgnoreCase("null")) ? "Chrome" : browserName;
+        ExtentFactory.getInstance().getExtent().assignCategory(browserName);
         DriverFactory.setDriver(browserName);
         driver = DriverFactory.getDriver();
         driver.navigate().to(prop.getProperty("APPLICATION_URL"));
@@ -81,20 +84,28 @@ public class BaseClass {
 
     @DataProvider(name = "input_data", parallel = true)
     public Object[][] getInputData(ITestNGMethod testNGMethod) {
+        List<Integer> row_indexes;
         Map<String, String> tc_data_from_runner;
-        Map<String, String> tc_data_from_datafile;
         Integer row_index = Runner.tc_names.get(testNGMethod.getDescription());
         tc_data_from_runner = excelHandlingRunner.getData(row_index);
         ExcelHandling excelHandlingDatafile = new ExcelHandling(tc_data_from_runner.get("TC_DATAFILE"), tc_data_from_runner.get("TC_DATASHEET"));
-        tc_data_from_datafile = excelHandlingDatafile.get_single_test_details(tc_data_from_runner.get("TC_NAME"), "TC_NAME");
-        return new Object[][]{{tc_data_from_datafile}};
+        row_indexes = excelHandlingDatafile.get_row_indexes_having_value_in_column(excelHandlingDatafile.getHeaderRow(), 0, tc_data_from_runner.get("TC_NAME"));
+        int data_size = row_indexes.size();
+        Object[][] data_array = new Object[data_size][1];
+        for (int i = 0; i < data_size; i++) {
+            data_array[i] = new Object[]{excelHandlingDatafile.getData(row_indexes.get(i))};
+        }
+        return data_array;
     }
 
     @AfterMethod
     public void closeBrowser() {
-        if (driver != null)
+        if (driver != null) {
             DriverFactory.getDriver().quit();
-        ThreadContext.clearMap();
+            ExtentFactory.getInstance().getExtent().assignCategory("WEB UI TEST");
+        } else {
+            ExtentFactory.getInstance().getExtent().assignCategory("API TEST");
+        }
     }
 
 

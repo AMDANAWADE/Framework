@@ -51,7 +51,6 @@ public class Log { //Initialize Log4j instance
         AppenderComponentBuilder appenderBuilder = builder.newAppender("LogToFile", "File")
                 .addAttribute("fileName", fileName)
                 .add(layoutBuilder);
-
         builder.add(appenderBuilder);
         RootLoggerComponentBuilder rootLogger = builder.newRootLogger(Level.INFO);
         rootLogger.add(builder.newAppenderRef("LogToFile"));

@@ -224,7 +224,6 @@ public class CommonWebActions {
     /***
      * This method is to delete all cookies
      */
-    //To delete all cookies
     public void deleteAllCookies() {
         try {
             this.driver.manage().deleteAllCookies();
@@ -286,6 +285,23 @@ public class CommonWebActions {
         }
     }
 
+    /***
+     * This method is to wait till element is visible
+     * @param locator xpath of element
+     * @return returns the web element
+     */
+    public WebElement waitTillElementIsVisible(By locator) {
+        WebElement element = null;
+        try {
+            WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            element = webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            baseClass.report_log(true, "Waiting till element is located " + element);
+        } catch (Exception e) {
+            Log.info(e.getMessage());
+            baseClass.report_log(false, "Failed to located element ");
+        }
+        return element;
+    }
     /***
      * This method is to scroll down the window
      */

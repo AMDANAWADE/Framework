@@ -11,18 +11,19 @@ import org.testng.Assert;
 public class LoginPage extends BaseClass {
 
     private WebDriver driver;
+    private CommonWebActions webActions;
     By Account = By.xpath("//a[@id='nav-link-accountList']");
     By Email_Text = By.xpath("//input[@id='ap_email']");
     By Continue = By.xpath("//input[@id='continue']");
     By Password = By.xpath("//input[@type='password']");
     By signin = By.id("signInSubmit");
-
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+        webActions = new CommonWebActions(this.driver);
     }
 
+
     public void login() {
-        CommonWebActions webActions = new CommonWebActions(driver);
         report_log(true, "Click on Sign in Button");
         WebElement Account_click;
         Account_click = webActions.getWebElement(Account);
@@ -31,7 +32,6 @@ public class LoginPage extends BaseClass {
     }
 
     public void enter_email(String email) {
-        CommonWebActions webActions = new CommonWebActions(driver);
         WebElement Email = webActions.getWebElement(Email_Text);
         webActions.sendKeysOnWebElement(Email, email);
         report_log(true, "Email entered");
@@ -41,7 +41,6 @@ public class LoginPage extends BaseClass {
     }
 
     public void enter_password(String password) {
-        CommonWebActions webActions = new CommonWebActions(driver);
         WebElement enter_password = webActions.getWebElement(Password);
         webActions.sendKeysOnWebElement(enter_password, password);
         report_log(true, "Password Entered");

@@ -42,9 +42,5 @@ public class ListenersImplementation extends BaseClass implements ITestListener,
         report = ExtentSetup.setupExtentReport();
 
     }
-    public void onStart(ITestNGMethod iTestNGMethod)
-    {
-        iTestNGMethod.getXmlTest().getName();
-    }
 }
 

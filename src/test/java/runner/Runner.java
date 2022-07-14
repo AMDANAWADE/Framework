@@ -39,8 +39,6 @@ public class Runner {
         }
         try {
             List<XmlClass> xmlClasses = new ArrayList<XmlClass>();
-            Set<String> classNames = new HashSet<>();
-            Set<String> tc_methods = new HashSet<>();
             XmlSuite testSuite = new XmlSuite();
             testSuite.setParallel(XmlSuite.ParallelMode.TESTS);
             XmlTest parallelTests = new XmlTest(testSuite);
@@ -54,10 +52,8 @@ public class Runner {
                 XmlClass tc_class = null;
                 if (testcase.get("TC_TYPE").equalsIgnoreCase("Web")) {
                     tc_class = new XmlClass(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
-                    classNames.add(prop.getProperty("UI_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
                 } else if (testcase.get("TC_TYPE").equalsIgnoreCase("API")) {
                     tc_class = new XmlClass(prop.getProperty("API_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
-                    classNames.add(prop.getProperty("API_TESTS_CLASSPATH") + "." + testcase.get("TC_CLASS"));
                     api_tests.put(testcase.get("TC_NAME"), testcase.get("TC_METHOD"));
                 }
                 xmlClasses.add(tc_class);
@@ -70,7 +66,6 @@ public class Runner {
                 method.setDescription(testcase.get("TC_NAME"));
                 tc_names.put(testcase.get("TC_NAME"), row_index);
                 methods.add(method);
-                tc_methods.add(testcase.get("TC_METHOD"));
                 tc_class.setIncludedMethods(methods);
                 if (testcase.get("PARALLEL").equalsIgnoreCase("Yes")) {
                     parallelTests.getClasses().add(tc_class);
@@ -80,8 +75,8 @@ public class Runner {
             }
             List<XmlSuite> suites = new ArrayList<>();
             suites.add(testSuite);
-            TestNG tng = new TestNG();
             listeners.add(ListenersImplementation.class);
+            TestNG tng = new TestNG();
             tng.setListenerClasses(listeners);
             tng.setXmlSuites(suites);
             tng.run();

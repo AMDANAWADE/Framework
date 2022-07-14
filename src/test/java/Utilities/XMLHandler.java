@@ -31,7 +31,7 @@ public class XMLHandler {
     /***
      * This method is to get data by sending xpath expression
      * @param Filepath is xml file location
-     * @param xpathExpression is xpath expression of the data to be fetched
+     * @param xpathExpression is xpath expression of the data to be fetched ex:/employees/employee[firstName='Alex']/@id
      * @return returns the value as a list
      */
     public static List<String> GetXPathData(String Filepath, String xpathExpression) {
@@ -58,7 +58,7 @@ public class XMLHandler {
     /***
      * This method is to update a value in xml file using xpath expression
      * @param Filepath is xml file location
-     * @param xpathExpression is xpath expression
+     * @param xpathExpression is xpath expression ex:/employees/employee[firstName='Alex']/@id
      * @param newValue is new value to be updated
      * @return returns the file path
      */
@@ -69,15 +69,15 @@ public class XMLHandler {
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             Document document;
             document = builder.parse(file);
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            Element element = (Element) xpath.evaluate(xpathExpression, document, XPathConstants.NODE);
-            element.setTextContent(newValue);
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource domSource = new DOMSource(document);
             StringWriter stringWriter = new StringWriter();
             StreamResult result = new StreamResult(stringWriter);
             StreamResult resultToFile = new StreamResult(new File(Filepath));
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            Element element = (Element) xpath.evaluate(xpathExpression, document, XPathConstants.NODE);
+            element.setTextContent(newValue);
             transformer.transform(domSource, resultToFile);
             transformer.transform(domSource, result);
             Filepath = stringWriter.toString();
@@ -99,6 +99,12 @@ public class XMLHandler {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
         Document document = documentBuilder.newDocument();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource domSource = new DOMSource(document);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        StreamResult resultToFile = new StreamResult(new File(Filepath));
         Element rootElement = null;
         Iterator<Map.Entry<String, String>> it = pathValueMap.entrySet().iterator();
         while (it.hasNext()) {
@@ -146,12 +152,6 @@ public class XMLHandler {
                 }
             }
         }
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource domSource = new DOMSource(document);
-        StringWriter writer = new StringWriter();
-        StreamResult result = new StreamResult(writer);
-        StreamResult resultToFile = new StreamResult(new File(Filepath));
         transformer.transform(domSource, resultToFile);
         transformer.transform(domSource, result);
         return writer.toString();
